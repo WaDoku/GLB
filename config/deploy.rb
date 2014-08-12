@@ -5,12 +5,12 @@ require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
 
 set :application, "DGLB"
-set :repository,  "git://github.com/thebluber/DGLB.git"
+set :repository,  "git://rokuhara.japanologie.kultur.uni-tuebingen.de/DGLB.git"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-server_ip = "wadoku.eu"
+server_ip = "rokuhara.japanologie.kultur.uni-tuebingen.de"
 
 role :web, server_ip                          # Your HTTP server, Apache/etc
 role :app, server_ip                          # This may be the same as your `Web` server
@@ -40,7 +40,7 @@ namespace :deploy do
   end
 
   task :fix_ownership, :roles => :app do
-    sudo "chown -R deploy:http #{deploy_to}"
+    sudo "chown -R deploy:www-data #{deploy_to}"
   end
 end
 
