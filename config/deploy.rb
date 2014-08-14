@@ -40,7 +40,7 @@ namespace :deploy do
   end
 
   task :fix_ownership, :roles => :app do
-    sudo "chown -R deploy:www-data #{deploy_to}"
+    run "chown -R deploy:www-data #{deploy_to}"
   end
 end
 
