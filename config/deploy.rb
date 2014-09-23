@@ -14,7 +14,7 @@ server_ip = "rokuhara.japanologie.kultur.uni-tuebingen.de"
 
 role :web, server_ip                          # Your HTTP server, Apache/etc
 role :app, server_ip                          # This may be the same as your `Web` server
-role :db,  server_ip, :primary => true # This is where Rails migrations will run
+role :db,  server_ip, :primary => true        # This is where Rails migrations will run
 
 # If you are using Passenger mod_rails uncomment this:
 # if you're still using the script/reapear helper you will need
@@ -26,6 +26,7 @@ default_run_options[:pty] = true
 set :deploy_via, :remote_cache
 set :user, "deploy"
 set :use_sudo, false
+set :keep_releases, 2
 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
@@ -36,7 +37,7 @@ namespace :deploy do
   task :stop do ; end
 
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+    run "touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 
   task :fix_ownership, :roles => :app do
@@ -79,3 +80,4 @@ end
 after "deploy:update_code", "db_setup:link_shared"
 after "deploy:setup", "db_setup:create_shared"
 after "deploy:update_code", "deploy:fix_ownership"
+after "deploy:restart", "deploy:cleanup"
