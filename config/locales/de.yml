@@ -4,6 +4,7 @@ de:
       entry:
         namenskuerzel: "Namenskürzel"
         japanische_umschrift: "Japanische Umschrift"
+        japanische_umschrift_din: "Romaji DIN 32708:2014-08"
         weitere_sprachen: "Weitere Sprachen"
         alternative_japanische_lesungen: "Alternative japanische Lesungen"
         deutsche_uebersetzung: "Deutsche Übersetzung"

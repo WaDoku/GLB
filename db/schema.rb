@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140723133917) do
+ActiveRecord::Schema.define(:version => 20151024192620) do
 
   create_table "ckeditor_assets", :force => true do |t|
     t.string   "data_file_name",                  :null => false
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20140723133917) do
     t.string   "page_reference"
     t.boolean  "freigeschaltet",                  :default => false
     t.string   "romaji_order"
+    t.string   "japanische_umschrift_din"
   end
 
   create_table "entry_docs", :force => true do |t|
