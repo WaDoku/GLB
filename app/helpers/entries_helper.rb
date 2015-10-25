@@ -5,6 +5,11 @@ module EntriesHelper
     page = kennzahl.split(":")[0].to_i #avoid error for kennzahl with 0 at the beginning
     [to_scan_pages_helper(page), to_scan_pages_helper(page + 1)]
   end
+
+  def sanskrit_special_chars
+    %w{Ā ā Æ æ Ǣ ǣ Ē ē Ī ī Ō ō Ū ū Ḍ ḍ Ġ ġ Ḥ ḥ Ḷ ḷ Ḹ ḹ Ṃ ṃ Ṁ ṁ Ṇ ṇ Ṅ ṅ Ñ ñ Ṛ ṛ Ṝ ṝ Ś ś Ṣ ṣ Ṭ ṭ}
+  end
+
   private
   def to_scan_pages_helper page
     page = page.to_s
