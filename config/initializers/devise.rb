@@ -48,6 +48,8 @@ Devise.setup do |config|
   # enable it only for database (email + password) authentication.
   # config.params_authenticatable = true
 
+
+  config.secret_key = '38de5583a1f3f6b6fef5d81cd3d744a5a43198a2874a14e792388a1cf95cf966505c8a55e4eb4538ad8bc9531692294d9dfb3ff88a08bf26f07cf43193f696d6'
   # Tell if authentication through HTTP Basic Auth is enabled. False by default.
   # It can be set to an array that will enable http authentication only for the
   # given strategies, for example, `config.http_authenticatable = [:token]` will
@@ -83,7 +85,7 @@ Devise.setup do |config|
 
   # Setup a pepper to generate the encrypted password.
   # config.pepper = "1d2e376c26a8b2ded5657d71c1f513ed3b3f50285a4a2bde87ff3cb43c7be4233da64ddf4d0e3c653516499c4322fb1aad4db626ab791a2a0605db207b8b3551"
-
+  
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
   # confirming his account. For instance, if set to 2.days, the user will be
@@ -99,7 +101,7 @@ Devise.setup do |config|
   # Default is nil, meaning there is no restriction on how long a user can take
   # before confirming their account.
   # config.confirm_within = 3.days
-
+ 
   # If true, requires any email changes to be confirmed (exactly the same way as
   # initial account confirmation) to be applied. Requires additional unconfirmed_email
   # db field (see migrations). Until confirmed new email is stored in
@@ -182,6 +184,9 @@ Devise.setup do |config|
   # Defines name of the authentication token params key
   # config.token_authentication_key = :auth_token
 
+
+  #config secret key
+  config.secret_key = '38de5583a1f3f6b6fef5d81cd3d744a5a43198a2874a14e792388a1cf95cf966505c8a55e4eb4538ad8bc9531692294d9dfb3ff88a08bf26f07cf43193f696d6'
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
   # "users/sessions/new". It's turned off by default because it's slower if you
