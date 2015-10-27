@@ -1,4 +1,5 @@
 class Entry < ActiveRecord::Base
+  require 'csv'
   has_paper_trail
   belongs_to :user
   has_many :comments
@@ -17,6 +18,15 @@ class Entry < ActiveRecord::Base
     substituter = Substituter.new
     if self.japanische_umschrift
       self.romaji_order = substituter.substitute(self.japanische_umschrift).downcase
+    end
+  end
+
+  def self.to_csv
+    CSV.generate(:col_sep=>"\t", :quote_char => '"') do |csv|
+      csv << column_names
+      Entry.find_each(batch_size: 500) do |entry|
+        csv << entry.attributes.values_at(*column_names)
+      end
     end
   end
 

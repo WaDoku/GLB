@@ -30,6 +30,7 @@
               <li><%= link_to "Meine Einträge", users_entries_path(current_user), :method => :get, :target => "_self" %></li>
               <% if current_user.admin? %>
                 <li><%= link_to "Neuer Eintrag", new_entry_path, :method => :get, :target => "_self" %></li>
+                <li><%= link_to "Alle Einträge exportieren (csv)", entries_path(format: :csv), :method => :get %></li>
               <% end %>
             </ul>
           </li>
