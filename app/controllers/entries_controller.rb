@@ -14,6 +14,7 @@ class EntriesController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @entries }
       format.csv {send_data @entries.to_csv, :type => 'text/csv', :disposition => "attachment; filename=glb.csv"}
+      format.xml {send_data Entry.find(:all).to_xml, :type => 'text/xml', :disposition => "attachment; filename=glb.xml"}
     end
   end
 
