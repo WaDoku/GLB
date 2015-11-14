@@ -13,6 +13,8 @@ class EntriesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @entries }
+      format.csv {send_data @entries.to_csv, :type => 'text/csv', :disposition => "attachment; filename=glb.csv"}
+      format.xml {send_data Entry.find(:all).to_xml, :type => 'text/xml', :disposition => "attachment; filename=glb.xml"}
     end
   end
 
@@ -29,7 +31,6 @@ class EntriesController < ApplicationController
       format.json { render json: @entry }
     end
   end
-
 
   # GET /entries/new
   # GET /entries/new.json
@@ -110,4 +111,5 @@ class EntriesController < ApplicationController
   def undo_link
     view_context.link_to("Rückgängig", revert_version_path(@entry.versions.scoped.last), :method => :post)
   end
+
 end
