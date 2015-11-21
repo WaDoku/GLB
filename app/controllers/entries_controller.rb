@@ -55,6 +55,7 @@ class EntriesController < ApplicationController
   # POST /entries
   # POST /entries.json
   def create
+    params[:entry].delete("freigeschaltet")
     @entry = Entry.new(entry_params)
     @entry.user = current_user unless @entry.user_id.present?
 
@@ -80,7 +81,7 @@ class EntriesController < ApplicationController
     end
 
     respond_to do |format|
-      if @entry.update_attributes(params[:entry])
+      if @entry.update_attributes(entry_params)
         format.html { redirect_to @entry, notice: "Eintrag erfolgreich gespeichert. #{undo_link}" }
         format.json { head :no_content }
       else
@@ -125,7 +126,7 @@ class EntriesController < ApplicationController
   end
 
   def undo_link
-    view_context.link_to("Rückgängig", revert_version_path(@entry.versions.scoped.last), :method => :post)
+    view_context.link_to("Rückgängig", revert_version_path(@entry.versions.reload.last), :method => :post)
   end
 
   def record_not_found
