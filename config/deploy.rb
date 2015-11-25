@@ -3,7 +3,7 @@ require "bundler/capistrano"
 require "capistrano/ext/multistage"
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
-set :rvm_ruby_version, '2.0.0'
+set :rvm_ruby_version, '2.1.5'
 
 set :application, "DGLB"
 set :repository,  "http://rokuhara.japanologie.kultur.uni-tuebingen.de/gogs/WaDoku/DGLB.git"
