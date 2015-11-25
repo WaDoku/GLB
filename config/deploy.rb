@@ -5,7 +5,7 @@ require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
 
 set :application, "DGLB"
-set :repository,  "git://rokuhara.japanologie.kultur.uni-tuebingen.de/DGLB.git"
+set :repository,  "http://rokuhara.japanologie.kultur.uni-tuebingen.de/gogs/WaDoku/DGLB.git"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
