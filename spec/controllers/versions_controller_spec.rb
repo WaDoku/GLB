@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe VersionsController do
+describe VersionsController, :type => :controller do
 
 end

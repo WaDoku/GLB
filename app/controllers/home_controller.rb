@@ -1,8 +1,9 @@
 #encoding: utf-8
 class HomeController < ApplicationController
-  before_filter :authenticate_user!
+
+
   def index
-    params[:search] = nil if params[:search] and params[:search].strip == "" 
+    params[:search] = nil if params[:search] and params[:search].strip == ""
     @page = params[:page] || 0
     all_entries = (params[:search] ? Entry.search(params[:search]) : Entry).order("romaji_order")
     @count = all_entries.count

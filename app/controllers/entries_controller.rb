@@ -1,10 +1,12 @@
 #encoding: utf-8
 class EntriesController < ApplicationController
+
+  load_and_authorize_resource
+
   # GET /entries
   # GET /entries.json
-  before_filter :authenticate_user!
   def index
-    params[:search] = nil if params[:search] and params[:search].strip == "" 
+    params[:search] = nil if params[:search] and params[:search].strip == ""
     @page = params[:page] || 0
     all_entries = (params[:search] ? Entry.search(params[:search]) : Entry).order("romaji_order")
     @count = all_entries.count
@@ -59,10 +61,9 @@ class EntriesController < ApplicationController
   # POST /entries
   # POST /entries.json
   def create
-    @verfasser = User.find(params[:entry].delete('user_id'))
-    params[:entry].delete("freigeschaltet")
-    @entry = Entry.new(params[:entry])
-    @entry.user = @verfasser
+
+    @entry = Entry.new(entry_params)
+    @entry.user = current_user
 
     respond_to do |format|
       if @entry.save
@@ -83,7 +84,7 @@ class EntriesController < ApplicationController
       @verfasser = User.find(params[:entry].delete('user_id'))
       @entry.user = @verfasser
     end
-    
+
     respond_to do |format|
       if @entry.update_attributes(params[:entry])
         format.html { redirect_to @entry, notice: "Eintrag erfolgreich gespeichert. #{undo_link}" }
@@ -108,6 +109,11 @@ class EntriesController < ApplicationController
   end
 
   private
+
+  def entry_params
+    params.require(:entry).permit(Entry::ALLOWED_PARAMS)
+  end
+
   def undo_link
     view_context.link_to("Rückgängig", revert_version_path(@entry.versions.scoped.last), :method => :post)
   end

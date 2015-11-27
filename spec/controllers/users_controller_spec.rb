@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UsersController do
+describe UsersController, :type => :controller do
   describe "test if only admins can inspect the user list" do
     it "should show user list to admin" do
       admin = FactoryGirl.create(:admin)
@@ -74,7 +74,7 @@ describe UsersController do
     it "should not show edit page for another user's profile" do
       other = FactoryGirl.create(:editor)
       sign_in @user
-      get :edit, :id => other.id 
+      get :edit, :id => other.id
       response.should_not render_template("edit")
       response.should redirect_to root_path
     end

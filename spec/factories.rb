@@ -1,21 +1,22 @@
 #encoding: utf-8
 FactoryGirl.define do
-  factory :admin, class: User do
-    sequence(:email){|n| "admin_#{n}@example.com"}
-    sequence(:name){|n| "admin#{n}"}                                                                     
+
+  factory :user do
+    sequence(:email){|n| "editor_#{n}@example.com"}
+    sequence(:name){|n| "editor#{n}"}
     password "anything"
     password_confirmation "anything"
+  end
+
+  factory :admin, parent: :user do
     role "admin"
   end
-  factory :editor, class: User do
-    sequence(:email){|n| "editor_#{n}@example.com"}
-    sequence(:name){|n| "editor#{n}"}                                                                     
-    password "anything"
-    password_confirmation "anything"
+
+  factory :editor, parent: :user do
     role "editor"
   end
+
   factory :entry, class: Entry do
-    user {create :editor}
     namenskuerzel "ES"
     kennzahl "981:1"
     spaltenzahl "17"
@@ -25,6 +26,7 @@ FactoryGirl.define do
     deutsche_uebersetzung "Torheit, Dummheit {Nicht-Torheit}"
     uebersetzung "Torheit, Dummheit {Nicht-Torheit}"
   end
+
   factory :comment, class: Comment do
     entry {create :entry}
     user {create :editor}

@@ -8,4 +8,5 @@ tmp/
 *.sw?
 public/pdf
 index
-coverage 
+coverage
+config/database.yml

@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
+
   # GET /users
   # GET /users.json
-  before_filter :authenticate_user!, only: [:index, :entries, :edit, :show, :new, :update, :update_role, :destroy, :create]
-
   def index
     @users = User.all
 
@@ -11,7 +10,7 @@ class UsersController < ApplicationController
         format.html # index.html.erb
         format.json { render json: @users }
       end
-    else 
+    else
       flash[:notice] = 'Access denied!'
       redirect_to root_path
     end
@@ -20,7 +19,7 @@ class UsersController < ApplicationController
 
   def entries
     @page = params[:page] || 0
-    params[:search] = nil if params[:search] and params[:search].strip == "" 
+    params[:search] = nil if params[:search] and params[:search].strip == ""
     all_entries = (params[:search] ? current_user.search_entries(params[:search]) : current_user.entries).order("romaji_order")
     @count = all_entries.count
     @entries = all_entries.page(@page)

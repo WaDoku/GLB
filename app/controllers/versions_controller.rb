@@ -1,5 +1,6 @@
 #encoding: utf-8
 class VersionsController < ApplicationController
+
   def revert
     @version = Version.find(params[:id])
     if @version.reify
