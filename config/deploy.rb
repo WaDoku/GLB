@@ -2,11 +2,11 @@
 require "bundler/capistrano"
 require "capistrano/ext/multistage"
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
-set :rvm_ruby_string, "2.1.5"
+set :rvm_ruby_string, "2.2"
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
 
 set :application, "DGLB"
-set :repository,  "http://rokuhara.japanologie.kultur.uni-tuebingen.de/gogs/WaDoku/DGLB.git"
+set :repository,  "https://github.com/WaDoku/GLB.git"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
