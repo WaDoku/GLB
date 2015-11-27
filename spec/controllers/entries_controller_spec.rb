@@ -9,27 +9,38 @@ require 'spec_helper'
 
 describe EntriesController, :type => :controller do
 
+  let(:unpublished_entry) { FactoryGirl.create(:entry) }
+  let(:published_entry) { FactoryGirl.create(:published_entry) }
+
   before :each do
-    @user = FactoryGirl.create(:editor)
+    @editor = FactoryGirl.create(:editor)
     @admin = FactoryGirl.create(:admin)
-    @entry = FactoryGirl.create(:entry)
   end
 
   describe "GET index" do
-    it "assigns all entries as @entries" do
-      sign_in @admin
+    it "returns published entries" do
+      unpublished_entry && published_entry
       get :index
-      assigns(:entries).should eq([@entry])
-      sign_out @admin
+      assigns(:entries).tap do |entries|
+        expect(entries).to include(published_entry)
+        expect(entries).to_not include(unpublished_entry)
+      end
     end
   end
 
   describe "GET show" do
-    it "assigns the requested entry as @entry" do
-      sign_in @admin
-      get :show, {:id => @entry.to_param}
-      assigns(:entry).should eq(@entry)
-      sign_out @admin
+    before :each do
+      unpublished_entry && published_entry
+    end
+
+    it "doesn't show only published entries" do
+      get :show, {:id => unpublished_entry.to_param}
+      expect(response).to redirect_to(entries_url)
+    end
+
+    it "shows published entries" do
+      get :show, {:id => published_entry.to_param}
+      assigns(:entry).should eq(published_entry)
     end
   end
 
@@ -44,30 +55,64 @@ describe EntriesController, :type => :controller do
 
   describe "GET edit" do
     it "assigns the requested entry as @entry" do
-      sign_in @user
-      @entry.user = @user
+      sign_in @editor
+      @entry.user = @editor
       @entry.reload
       get :edit, {:id => @entry.to_param}
       assigns(:entry).should eq(@entry)
-      sign_out @user
+      sign_out @editor
     end
   end
 
   describe "POST create" do
-    before :each do
-      sign_in @admin
-    end
-
     describe "Admin creates an entry" do
+      before :each do
+        sign_in @admin
+      end
+
       it "creates a new Entry for herself" do
+        attributes = FactoryGirl.attributes_for(:entry)
+        attributes.delete(:user_id)
         expect {
-          post :create, :entry => FactoryGirl.attributes_for(:entry)
+          post :create, :entry => attributes
         }.to change(Entry, :count).by(1)
 
         assigns(:entry).tap do |entry|
           expect(entry.user).to eq(@admin)
         end
       end
+
+      context "creates an entry for another user" do
+        it "creates an entry for another editor" do
+          editor = FactoryGirl.create(:editor)
+          expect {
+            post :create, :entry => FactoryGirl.attributes_for(:entry).merge({user_id: editor.id })
+          }.to change(Entry, :count).by(1)
+
+          assigns(:entry).tap do |entry|
+            expect(entry.user).to eq(editor)
+          end
+        end
+
+        it "creates an entry for another admin" do
+          admin = FactoryGirl.create(:admin)
+          expect {
+            post :create, :entry => FactoryGirl.attributes_for(:entry).merge({user_id: admin.id })
+          }.to change(Entry, :count).by(1)
+
+          assigns(:entry).tap do |entry|
+            expect(entry.user).to eq(admin)
+          end
+        end
+
+        it "doesn't create an entry for a non admin or editor user" do
+          user = FactoryGirl.create(:user)
+
+          post :create, :entry => FactoryGirl.attributes_for(:entry).merge({user_id: user.id })
+          expect(response.code).to eq(200.to_s)
+        end
+      end
+
 
       it "redirects to the created entry" do
         post :create, :entry => FactoryGirl.attributes_for(:entry)
@@ -76,20 +121,32 @@ describe EntriesController, :type => :controller do
     end
 
     describe "Editor creates an entry" do
+      before :each do
+        sign_in @editor
+      end
+
+      it "creates a new Entry for herself" do
+        attributes = FactoryGirl.attributes_for(:entry)
+        attributes.delete(:user_id)
+        expect {
+          post :create, :entry => attributes
+        }.to change(Entry, :count).by(1)
+
+        assigns(:entry).tap do |entry|
+          expect(entry.user).to eq(@editor)
+        end
+      end
     end
 
     describe "User tries to creates an entry" do
+      it "creates a new Entry for herself" do
+        attributes = FactoryGirl.attributes_for(:entry)
+        attributes.delete(:user_id)
+        post :create, :entry => attributes
+        expect(response.code).to eq(302.to_s)
+        expect(response).to redirect_to(new_user_session_path)
+      end
     end
-
-
-
-
-
-
-
-
-
-
   end
 
   describe "PUT update" do

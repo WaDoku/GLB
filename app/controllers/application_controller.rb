@@ -3,7 +3,14 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
   before_filter :authenticate_user!
 
+
+  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+
   protected
+
+  def record_not_found
+    redirect_to root_path
+  end
 
   def layout_by_resource
     if devise_controller?

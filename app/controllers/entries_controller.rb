@@ -2,31 +2,25 @@
 class EntriesController < ApplicationController
 
   load_and_authorize_resource
+  skip_before_filter :authenticate_user!, only: [:index, :show]
+  before_filter :entry, only: [:show]
 
   # GET /entries
   # GET /entries.json
   def index
-    params[:search] = nil if params[:search] and params[:search].strip == ""
-    @page = params[:page] || 0
-    all_entries = (params[:search] ? Entry.search(params[:search]) : Entry).order("romaji_order")
-    @count = all_entries.count
-    @entries = all_entries.page(@page)
+    @count = Entry.published.count
+    @entries = Entry.published.page(page)
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @entries }
-      format.csv {send_data @entries.to_csv, :type => 'text/csv', :disposition => "attachment; filename=glb.csv"}
-      format.xml {send_data Entry.find(:all).to_xml, :type => 'text/xml', :disposition => "attachment; filename=glb.xml"}
     end
   end
 
   # GET /entries/1
   # GET /entries/1.json
   def show
-    @entry = Entry.find(params[:id])
-    @comment = Comment.new
-    @comment.entry = @entry
-    @comment.user = current_user
+    build_entry_comment
 
     respond_to do |format|
       format.html # show.html.erb
@@ -61,9 +55,8 @@ class EntriesController < ApplicationController
   # POST /entries
   # POST /entries.json
   def create
-
     @entry = Entry.new(entry_params)
-    @entry.user = current_user
+    @entry.user = current_user unless @entry.user_id.present?
 
     respond_to do |format|
       if @entry.save
@@ -74,6 +67,7 @@ class EntriesController < ApplicationController
         format.json { render json: @entry.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PUT /entries/1
@@ -110,12 +104,32 @@ class EntriesController < ApplicationController
 
   private
 
+  def entry
+    @entry = Entry.published.find(params[:id])
+  end
+
+  def build_entry_comment
+    if current_user
+      @comment = Comment.new
+      @comment.entry = @entry
+      @comment.user = current_user
+    end
+  end
+
+  def page
+    params[:page] || 1
+  end
+
   def entry_params
     params.require(:entry).permit(Entry::ALLOWED_PARAMS)
   end
 
   def undo_link
     view_context.link_to("Rückgängig", revert_version_path(@entry.versions.scoped.last), :method => :post)
+  end
+
+  def record_not_found
+    redirect_to entries_url
   end
 
 end

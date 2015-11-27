@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :email, presence: true
 
+  scope :allowed_for_entries, ->{ where( role: ['admin', 'editor']) }
+
   def admin?
     role == "admin"
   end

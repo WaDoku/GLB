@@ -27,7 +27,7 @@
 class Entry < ActiveRecord::Base
   has_paper_trail
 
-  ALLOWED_PARAMS = [:namenskuerzel, :kennzahl, :spaltenzahl, :japanische_umschrift, :kanji, :pali, :sanskrit, :chinesisch, :tibetisch, :koreanisch, :weitere_sprachen, :alternative_japanische_lesungen, :schreibvarianten, :deutsche_uebersetzung, :lemma_art, :jahreszahlen, :uebersetzung, :quellen, :literatur, :eigene_ergaenzungen, :quellen_ergaenzungen, :literatur_ergaenzungen, :page_reference, :romaji_order]
+  ALLOWED_PARAMS = [:namenskuerzel, :kennzahl, :spaltenzahl, :japanische_umschrift, :kanji, :pali, :sanskrit, :chinesisch, :tibetisch, :koreanisch, :weitere_sprachen, :alternative_japanische_lesungen, :schreibvarianten, :deutsche_uebersetzung, :lemma_art, :jahreszahlen, :uebersetzung, :quellen, :literatur, :eigene_ergaenzungen, :quellen_ergaenzungen, :literatur_ergaenzungen, :page_reference, :romaji_order, :user_id]
 
   belongs_to :user
   has_many :comments
@@ -35,7 +35,11 @@ class Entry < ActiveRecord::Base
   has_many :entry_htmls
 
   validates :kennzahl, presence: true
+  validate :user_is_allowed
+
   before_save :cleanup
+
+  scope :published, -> { where( freigeschaltet: true ) }
 
   def self.search(query)
     Entry.where("japanische_umschrift LIKE ? OR kanji LIKE ? OR namenskuerzel = ? OR kennzahl = ? OR romaji_order LIKE ?", "%#{query}%", "%#{query}%", "#{query}", "#{query}", "%#{query}%")
@@ -48,4 +52,11 @@ class Entry < ActiveRecord::Base
     end
   end
 
+  private
+
+  def user_is_allowed
+    unless User.allowed_for_entries.where(id: self.user_id).any?
+      errors.add( :user_id ,  "User is not allowed to create entry")
+    end
+  end
 end
