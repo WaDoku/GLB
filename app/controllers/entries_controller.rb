@@ -8,8 +8,8 @@ class EntriesController < ApplicationController
   # GET /entries
   # GET /entries.json
   def index
-    @count = Entry.published.count
-    @entries = Entry.published.page(page)
+    @count = Entry.count
+    @entries = Entry.page(page)
 
     respond_to do |format|
       format.html # index.html.erb
