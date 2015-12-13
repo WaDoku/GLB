@@ -88,16 +88,17 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.json
   def update
-    @user = User.find(user_params)
+    @user = User.find(params[:id])
     if params[:user]["role"] && !admin?
       params[:user].delete("role")
     end
+
     respond_to do |format|
-      if @user.update_attributes(params[:user])
-        format.html { redirect_to root_path, notice: 'User was successfully updated.' }
+      if @user.update_attributes(user_params)
+        format.html { redirect_to user_path(@user), notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to edit_user_path(@user), notice: 'Something went wrong.' }
+        format.html { redirect_to edit_user_path(@user), notice: "Something went wrong. #{@user.errors.messages.values.join('<br />')}" }
         format.json { render json: @user.errors, role: :unprocessable_entity }
       end
     end
