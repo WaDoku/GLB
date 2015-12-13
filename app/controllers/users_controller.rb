@@ -88,7 +88,7 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.json
   def update
-    @user = User.find(params[:id])
+    @user = User.find(user_params)
     if params[:user]["role"] && !admin?
       params[:user].delete("role")
     end
@@ -107,7 +107,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     respond_to do |format|
       if admin?
-        if @user.update_attributes(params[:user])
+        if @user.update_attributes(user_params)
           format.html { redirect_to users_path, notice: 'User was successfully updated.' }
           format.json { head :no_content }
         else
