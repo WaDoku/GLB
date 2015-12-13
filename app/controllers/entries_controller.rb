@@ -2,15 +2,15 @@
 class EntriesController < ApplicationController
 
   load_and_authorize_resource
-  skip_before_filter :authenticate_user!, only: [:index, :show]
+  # uncomment sḱip_before_filter to make entries visible; (preferably in connection with published filter)
+  #skip_before_filter :authenticate_user!, only: [:index, :show]
   before_filter :entry, only: [:show]
-
+  before_filter :selected_entries, only: [:index]
   # GET /entries
   # GET /entries.json
   def index
-    @count = Entry.count
-    @entries = Entry.page(page)
-
+    @count = @selected_entries.count
+    @entries = @selected_entries.page(@page)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @entries }
@@ -21,7 +21,6 @@ class EntriesController < ApplicationController
   # GET /entries/1.json
   def show
     build_entry_comment
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @entry }
@@ -106,7 +105,14 @@ class EntriesController < ApplicationController
   private
 
   def entry
-    @entry = Entry.published.find(params[:id])
+    # published filter does not apply to any entries yet
+    #@entry = Entry.published.find(params[:id])
+    @entry = Entry.find(params[:id])
+  end
+
+  def selected_entries
+    params[:search] = nil if params[:search] and params[:search].strip == ""
+    @selected_entries = (params[:search] ? Entry.search(params[:search]) : Entry).order("romaji_order")
   end
 
   def build_entry_comment
