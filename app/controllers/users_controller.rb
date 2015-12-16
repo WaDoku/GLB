@@ -72,7 +72,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
 
     respond_to do |format|
       if @user.save
@@ -92,12 +92,13 @@ class UsersController < ApplicationController
     if params[:user]["role"] && !admin?
       params[:user].delete("role")
     end
+
     respond_to do |format|
-      if @user.update_attributes(params[:user])
-        format.html { redirect_to root_path, notice: 'User was successfully updated.' }
+      if @user.update_attributes(user_params)
+        format.html { redirect_to user_path(@user), notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to edit_user_path(@user), notice: 'Something went wrong.' }
+        format.html { redirect_to edit_user_path(@user), notice: "Something went wrong. #{@user.errors.messages.values.join('<br />')}" }
         format.json { render json: @user.errors, role: :unprocessable_entity }
       end
     end
@@ -107,7 +108,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     respond_to do |format|
       if admin?
-        if @user.update_attributes(params[:user])
+        if @user.update_attributes(user_params)
           format.html { redirect_to users_path, notice: 'User was successfully updated.' }
           format.json { head :no_content }
         else
@@ -131,4 +132,8 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  private
+    def user_params
+      params.require(:user).permit(:name, :role, :password_confirmation, :password, :email)
+    end
 end
