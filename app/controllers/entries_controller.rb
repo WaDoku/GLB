@@ -2,15 +2,15 @@
 class EntriesController < ApplicationController
 
   load_and_authorize_resource
-  skip_before_filter :authenticate_user!, only: [:index, :show]
+  # uncomment sḱip_before_filter to make entries visible; (preferably in connection with published filter)
+  #skip_before_filter :authenticate_user!, only: [:index, :show]
   before_filter :entry, only: [:show]
-
+  before_filter :selected_entries, only: [:index]
   # GET /entries
   # GET /entries.json
   def index
-    @count = Entry.published.count
-    @entries = Entry.published.page(page)
-
+    @count = @selected_entries.count
+    @entries = @selected_entries.page(@page)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @entries }
@@ -21,7 +21,6 @@ class EntriesController < ApplicationController
   # GET /entries/1.json
   def show
     build_entry_comment
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @entry }
@@ -55,6 +54,7 @@ class EntriesController < ApplicationController
   # POST /entries
   # POST /entries.json
   def create
+    params[:entry].delete("freigeschaltet")
     @entry = Entry.new(entry_params)
     @entry.user = current_user unless @entry.user_id.present?
 
@@ -80,7 +80,7 @@ class EntriesController < ApplicationController
     end
 
     respond_to do |format|
-      if @entry.update_attributes(params[:entry])
+      if @entry.update_attributes(entry_params)
         format.html { redirect_to @entry, notice: "Eintrag erfolgreich gespeichert. #{undo_link}" }
         format.json { head :no_content }
       else
@@ -105,7 +105,14 @@ class EntriesController < ApplicationController
   private
 
   def entry
-    @entry = Entry.published.find(params[:id])
+    # published filter does not apply to any entries yet
+    #@entry = Entry.published.find(params[:id])
+    @entry = Entry.find(params[:id])
+  end
+
+  def selected_entries
+    params[:search] = nil if params[:search] and params[:search].strip == ""
+    @selected_entries = (params[:search] ? Entry.search(params[:search]) : Entry).order("romaji_order")
   end
 
   def build_entry_comment
@@ -125,7 +132,7 @@ class EntriesController < ApplicationController
   end
 
   def undo_link
-    view_context.link_to("Rückgängig", revert_version_path(@entry.versions.scoped.last), :method => :post)
+    view_context.link_to("Rückgängig", revert_version_path(@entry.versions.reload.last), :method => :post)
   end
 
   def record_not_found

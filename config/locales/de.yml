@@ -23,6 +23,7 @@ de:
               invalid: "Bitte geben Sie Ihr neues Passwort ein!"
             email:
               blank: "Email darf nicht leer sein!"
+              taken: "Diese E-Mail wird bereits verwendet!"
             name:
               blank: "Name darf nicht leer sein!"
             password:

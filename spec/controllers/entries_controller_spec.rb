@@ -54,12 +54,15 @@ describe EntriesController, :type => :controller do
   end
 
   describe "GET edit" do
+    before :each do
+      unpublished_entry
+    end
     it "assigns the requested entry as @entry" do
       sign_in @editor
-      @entry.user = @editor
-      @entry.reload
-      get :edit, {:id => @entry.to_param}
-      assigns(:entry).should eq(@entry)
+      unpublished_entry.user = @editor
+      unpublished_entry.reload
+      get :edit, {:id => unpublished_entry.to_param}
+      assigns(:entry).should eq(unpublished_entry)
       sign_out @editor
     end
   end
@@ -116,7 +119,7 @@ describe EntriesController, :type => :controller do
 
       it "redirects to the created entry" do
         post :create, :entry => FactoryGirl.attributes_for(:entry)
-        response.should redirect_to(Entry.last)
+        expect(response).to redirect_to(Entry.last)
       end
     end
 
@@ -153,7 +156,7 @@ describe EntriesController, :type => :controller do
     describe "with valid params" do
       pending
       it "updates the requested entry" do
-        entry = Entry.create! valid_attributes
+        entry = Entry.create! FactoryGirl.attributes_for(:entry)
         # Assuming there are no other entries in the database, this
         # specifies that the Entry created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -163,15 +166,16 @@ describe EntriesController, :type => :controller do
       end
 
       it "assigns the requested entry as @entry" do
-        entry = Entry.create! valid_attributes
-        put :update, {:id => entry.to_param, :entry => valid_attributes}
-        assigns(:entry).should eq(entry)
+        entry = Entry.create! FactoryGirl.attributes_for(:entry)
+        put :update, {:id => entry.to_param, :entry => FactoryGirl.attributes_for(:entry)}
+        subject { assigns(:entry) }
+        it {is_expected.to eq(entry) }
       end
 
       it "redirects to the entry" do
-        entry = Entry.create! valid_attributes
-        put :update, {:id => entry.to_param, :entry => valid_attributes}
-        response.should redirect_to(entry)
+        entry = Entry.create! FactoryGirl.attributes_for(:entry)
+        put :update, {:id => entry.to_param, :entry => FactoryGirl.attributes_for(:entry)}
+        expect(response).to redirect_to(entry)
       end
     end
 

@@ -38,6 +38,7 @@ de:
     sessions:
       new:
         sign_in: Anmelden
+        remember_me: Passwort auf diesem Computer merken
     shared:
       links:
         didn_t_receive_confirmation_instructions: Keine Anleitung zur Bestätigung erhalten?

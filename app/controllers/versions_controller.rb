@@ -2,7 +2,7 @@
 class VersionsController < ApplicationController
 
   def revert
-    @version = Version.find(params[:id])
+    @version = PaperTrail::Version.find(params[:id])
     if @version.reify
       @version.reify.save!
     else
