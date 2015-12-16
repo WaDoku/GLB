@@ -94,7 +94,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      if @user.update_attributes(user_params)
+      if @user.update(user_params)
         format.html { redirect_to user_path(@user), notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
@@ -108,7 +108,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     respond_to do |format|
       if admin?
-        if @user.update_attributes(user_params)
+        if @user.update(user_params)
           format.html { redirect_to users_path, notice: 'User was successfully updated.' }
           format.json { head :no_content }
         else
