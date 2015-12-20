@@ -92,10 +92,11 @@ class UsersController < ApplicationController
     if params[:user]["role"] && !admin?
       params[:user].delete("role")
     end
-
+    # only redirect admins to show / update role
+    redirect_path = admin? ? user_path(@user) : entries_path
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to user_path(@user), notice: 'User was successfully updated.' }
+        format.html { redirect_to redirect_path, notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { redirect_to edit_user_path(@user), notice: "Something went wrong. #{@user.errors.messages.values.join('<br />')}" }
