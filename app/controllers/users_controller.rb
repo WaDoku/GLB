@@ -99,7 +99,7 @@ class UsersController < ApplicationController
         format.html { redirect_to redirect_path, notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to edit_user_path(@user), notice: "Something went wrong. #{@user.errors.messages.values.join('<br />')}" }
+        format.html { redirect_to edit_user_path(@user), notice: @user.errors.messages.values.flatten.uniq.join('<br />') }
         format.json { render json: @user.errors, role: :unprocessable_entity }
       end
     end
