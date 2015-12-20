@@ -25,6 +25,7 @@
 # romaji_order
 
 class Entry < ActiveRecord::Base
+  require 'csv'
   has_paper_trail
 
   ALLOWED_PARAMS = [:namenskuerzel, :kennzahl, :spaltenzahl, :japanische_umschrift, :kanji, :pali, :sanskrit, :chinesisch, :tibetisch, :koreanisch, :weitere_sprachen, :alternative_japanische_lesungen, :schreibvarianten, :deutsche_uebersetzung, :lemma_art, :jahreszahlen, :uebersetzung, :quellen, :literatur, :eigene_ergaenzungen, :quellen_ergaenzungen, :literatur_ergaenzungen, :page_reference, :romaji_order, :user_id]
@@ -57,6 +58,14 @@ class Entry < ActiveRecord::Base
   def user_is_allowed
     unless User.allowed_for_entries.where(id: self.user_id).any?
       errors.add( :user_id ,  "User is not allowed to create entry")
+    end
+  end
+  def self.to_csv
+    CSV.generate(:col_sep=>"\t", :quote_char => '"') do |csv|
+      csv << column_names
+      Entry.find_each(batch_size: 500) do |entry|
+        csv << entry.attributes.values_at(*column_names)
+      end
     end
   end
 end
