@@ -11,10 +11,14 @@ class EntriesController < ApplicationController
   def index
     @count = @selected_entries.count
     @entries = @selected_entries.page(@page)
+
     respond_to do |format|
       format.html # index.html.erb
+      format.csv {send_data @entries.to_csv, :type => 'text/csv', :disposition => "attachment; filename=glb.csv"}
+      format.xml {send_data @entries.to_xml, :type => 'text/xml', :disposition => "attachment; filename=glb.xml"}
       format.json { render json: @entries }
     end
+
   end
 
   # GET /entries/1
