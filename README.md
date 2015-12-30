@@ -1,0 +1,1 @@
+{<img src="https://badges.gitter.im/WaDoku/GLB.svg" alt="Join the chat at https://gitter.im/WaDoku/GLB">}[https://gitter.im/WaDoku/GLB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge]
