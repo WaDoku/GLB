@@ -30,6 +30,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'guard-rspec'
   gem 'database_cleaner'
+  gem 'pry-rails'
 end
 
 group :deployment do
