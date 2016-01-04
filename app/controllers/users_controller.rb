@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :find_user, only: [:show, :update_role, :update]
+  before_action :find_user, only: [:show, :update]
   before_filter :protect_from_non_admins, except: [:edit, :update]
   before_filter :protect_from_non_currents, only: [:edit, :update]
 
@@ -58,25 +58,12 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.json
   def update
-    redirect_path = admin? ? user_path(@user) : entries_path
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to redirect_path, notice: 'User was successfully updated.' }
+        format.html { redirect_to user_path, notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { redirect_to edit_user_path(@user), notice: @user.errors.messages.values.flatten.uniq.join('<br />') }
-        format.json { render json: @user.errors, role: :unprocessable_entity }
-      end
-    end
-  end
-
-  def update_role
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to users_path, notice: 'User was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to user_path(@user), notice: 'Something went wrong.' }
         format.json { render json: @user.errors, role: :unprocessable_entity }
       end
     end
@@ -109,7 +96,11 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :role, :password_confirmation, :password, :email)
+    if admin?
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :role)
+    else
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
   end
 
   def find_user
@@ -121,8 +112,7 @@ class UsersController < ApplicationController
   end
 
   def protect_from_non_currents
-    @user = User.find(params[:id])
-    handle_unauthorized unless current_user.id == @user.id
+    handle_unauthorized unless current_user?
   end
 
   def handle_unauthorized

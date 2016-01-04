@@ -16,7 +16,8 @@
         <td><%= user.email %></td>
         <td><%= user.role.capitalize %></td>
         <td><%= link_to 'Anzeigen', user %>
-         | <%= link_to 'Löschen', user, method: :delete, data: { confirm: 'Wollen Sie diesen Mitarbeiter wirklich löschen?' } %></td>
+        <%= link_to "Status Ändern", edit_user_path(user, @user) %>
+         | <%= link_to 'Löschen', user, method: :delete, data: { confirm: 'Wollen Sie diesen Mitarbeiter wirklich löschen?' } %>
       </tr>
     <% end %>
   </table>
