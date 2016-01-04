@@ -67,4 +67,6 @@ DGLB::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
+  # do eager load all registered 
+  config.eager_load  = true
 end

@@ -27,4 +27,7 @@ DGLB::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # do not eager load all registered 
+  config.eager_load  = false
 end
