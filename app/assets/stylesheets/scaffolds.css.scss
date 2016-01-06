@@ -31,12 +31,14 @@ div {
 
 .field_with_errors {
   padding: 2px;
-  background-color: red;
-  display: table;
+  color: red;
+  input {
+    border: 1px solid red;
+  }
 }
 
 #error_explanation {
-  width: 360px;
+  max-width: 360px;
   border: 2px solid red;
   padding: 7px;
   padding-bottom: 0;
@@ -51,6 +53,7 @@ div {
     margin-bottom: 0px;
     background-color: #c00;
     color: #fff;
+    line-height: 20px;
   }
   ul li {
     font-size: 12px;
