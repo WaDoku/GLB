@@ -10,7 +10,7 @@ class EntriesController < ApplicationController
   # GET /entries.json
   def index
     @count = @selected_entries.count
-    @entries = @selected_entries.page(@page)
+    @entries = @selected_entries.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
