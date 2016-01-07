@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :find_user, only: [:show, :update]
-  before_filter :protect_from_non_admins, except: [:edit, :update]
+  before_filter :protect_from_non_admins, except: [:entries, :edit, :update]
   before_filter :protect_from_non_currents, only: [:edit, :update]
 
   # GET /users
