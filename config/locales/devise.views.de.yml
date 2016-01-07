@@ -15,7 +15,7 @@ de:
         instruction: Jemand hat einen Link angefordert, um Ihr Passwort zu ändern, und Sie können das durch den unten aufgeführten Link tun.
         instruction_2: Wenn Sie das nicht angefordert haben, bitte ignorieren Sie diese E-mail.
         instruction_3: Das Passwort wird nicht geändert bis Sie den obenstehenden Link abrufen, und ein neues Passwort bestimmen.
-        subject: Anleitung um das Passwort zurückzusetzten
+        subject: Anleitung um das Passwort zurückzusetzen
       unlock_instructions:
         action: Mein Konto entsperren
         greeting: Hallo %{recipient}!

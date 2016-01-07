@@ -4,10 +4,10 @@ describe "PasswordResets" do
   it "emails user when requesting password reset" do
     user = FactoryGirl.create(:editor)
     visit new_user_session_path
-    click_link "password"
-    fill_in "Email", :with => user.email
-    click_button "Send me reset password instructions"
-    last_email.to.should include(user.email)
+    click_link "Passwort vergessen?"
+    fill_in "E-Mail", :with => user.email
+    click_button "Anleitung schicken, um mein Passwort zurückzusetzen"
+    expect(ActionMailer::Base.deliveries[0].to).to include(user.email)
   end
 
 end
