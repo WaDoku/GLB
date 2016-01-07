@@ -105,7 +105,7 @@
     <dt class="label">Literatur Ergänzungen</dt>
     <dd><%= raw(@entry.literatur_ergaenzungen) %></dd>
   </dl> 
-  <% if @entry.user == current_user %>
+  <% if @entry.user == current_user || current_user.admin?%>
     <%= link_to 'Bearbeiten', edit_entry_path(@entry) %> |
   <% end %>
   <%= link_to 'Zurück', entries_path %>
