@@ -1,45 +1,43 @@
 require 'spec_helper'
 
 describe User do
-  let(:editor) { FactoryGirl.create(:editor) }
+  let!(:user) { FactoryGirl.create(:user) }
+  let!(:super_admin) { FactoryGirl.create(:user, email: 'ulrich.apel@uni-tuebingen.de') }
 
-  before do
-    editor
-  end
-  it "should create a new instance of a user
-  given valid attributes" do
-    expect(editor).to be_valid
-    expect(editor.role).to eq('editor')
+  it 'creates a new instance of a user given valid attributes' do
+    expect(user).to be_valid
+    expect(user.role).to eq('user')
   end
 
-  it "is invalid without name" do
-    editor.name = nil
-    expect(editor).not_to be_valid
+  it 'is invalid without name' do
+    user.name = nil
+    expect(user).not_to be_valid
   end
 
-  it "is invalid without email" do
-    editor.email= nil
-    expect(editor).not_to be_valid
+  it 'is invalid without email' do
+    user.email = nil
+    expect(user).not_to be_valid
   end
 
-  it "is invalid without password" do
-    editor.password = nil
-    expect(editor).not_to be_valid
+  it 'is invalid without password' do
+    user.password = nil
+    expect(user).not_to be_valid
   end
 
-  context 'if we delete a user' do
-    let(:admin) { FactoryGirl.create(:admin) }
+  it 'is invalid without role' do
+    user.role = nil
+    expect(user).not_to be_valid
+  end
 
-    it "does not delete the corresponding entries" do
-      # entry = FactoryGirl.create(:entry, user_id: admin.id)
-      # admin.reload
-      # admin.destroy # model level
-      # expect(entry.persisted?).to be(true)
-
-      admin.entries << FactoryGirl.create(:entry)
-      admin.destroy # model level
-      expect(Entry.count).to eq(1)
+  context 'deletion' do
+    it 'deletes a user that does not holds entries' do
+      user
+      user.destroy
+      expect(user.persisted?).to eq(false)
+    end
+    it 'does not delete a user that holds entries' do
+      user.entries << FactoryGirl.create(:entry)
+      expect { user.destroy }.to raise_error('User still holds entries')
     end
   end
 end
-

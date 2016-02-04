@@ -1,18 +1,17 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  protect_from_forgery :except => :receive_guest
   layout :layout_by_resource
-  before_filter :authenticate_user!
-  before_action :configure_permitted_parameters, if: :devise_controller?
 
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
-
-
-  protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:account_update) << :email
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:notice] = "Zugriff verwehrt"
+    redirect_to root_path
   end
-  protected
+
+  # def current_user
+  #   super || User.new(role: 'guest') #methoden auftruf der superklasse
+  # end
 
   def record_not_found
     redirect_to root_path
@@ -24,11 +23,27 @@ class ApplicationController < ActionController::Base
     else
       "application"
     end
-
   end
 
   def admin?
-    current_user.role == 'admin'
+    current_user && current_user.admin?
+  end
+
+  def editor?
+    current_user && current_user.editor?
+  end
+
+  def author?
+    current_user && current_user.author?
+  end
+  
+
+  def commentator?
+    current_user && current_user.commentator?
+  end
+
+  def guest?
+    current_user
   end
 
   def current_user?
