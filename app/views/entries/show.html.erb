@@ -1,163 +1,177 @@
-<% content_for :sidebar do %>
-  <div class="well sidebar-nav">
-    <ul class="nav nav-list">
-      <li class="nav-header">Suche</li>
-      <%= form_tag entries_path, method: "get", id: "search_form", target: "_self" do %>
-        <fieldset>
-          <li>
-            <label for="search">Suchbegriff</label>
-            <input type="text" id="search" name="search" class="span12" value="<%= params[:search] %>"></input>
-          </li>
-        <fieldset>
-        <li>
-          <button id="search_button" class="btn">Suchen</button>
-        </li>
-      <% end %>
-      <li class="nav-header">Scan der Originalseite</li>
-      <li>
-      <% pages = to_scan_pages(@entry.kennzahl) %>
-      <%= link_to "Seite #{pages[0]} anzeigen", "/SBDJ-Original-JPGs/SBDJ_Seite_#{pages[0]}.jpg", :target => "_blank" %>
-      </li>
-      <li>
-        <%= link_to "Seite #{pages[1]} anzeigen", "/SBDJ-Original-JPGs/SBDJ_Seite_#{pages[1]}.jpg", :target => "_blank" %>
-      </li>
-      <li class="nav-header">Frühere Eintragsversionen</li>
-      <% if @entry.entry_docs.present? %>
-        <% @entry.entry_docs.each do |doc| %>
-          <li>
-          <%= link_to "Word-Datei (" + doc.page_reference + ")", entry_doc_path(doc), :target => "_blank" %>
-          </li>
-        <% end %>
-      <% end %>
-      <% if @entry.entry_htmls.present? %>
-        <% @entry.entry_htmls.each do |html| %>
-          <% if html.page_reference.present? %>
-            <li>
-            <%= link_to "HTML-Datei (" + html.page_reference + ")", entry_html_path(html), :target => "_blank" %>
-            </li>
-          <% end %>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render 'entries/scan_and_html_box' %>
 <% content_for :content do %>
-    <% if flash[:notice] && flash[:notice][0..4] == "Entry" %> 
-      <div class="alert alert-notice">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong><%= raw(flash[:notice]) %></strong>
-      </div>
-    <% end %>
-
-  <dl class="dl">
-    <dt class="label">Verfasser</dt>
-    <dd><%= @entry.user.name %></dd>
-    <dt class="label">Namenskürzel</dt>
-    <dd><%= @entry.namenskuerzel %></dd>
-
-    <dt class="label">Kennzahl</dt>
-    <dd><%= @entry.kennzahl %></dd>
-    <dt class="label">Spaltenzahl</dt>
-    <dd><%= @entry.spaltenzahl %></dd>
-    <dt class="label">Page Referenz</dt>
-    <dd><%= @entry.page_reference %></dd>
-    <dt class="label">Japanische Umschrift</dt>
-    <dd><%= @entry.japanische_umschrift %></dd>
-    <dt class="label">Kanji</dt>
-    <dd><%= @entry.kanji %></dd>
-
-    <dt class="label">Pali</dt>
-    <dd><%= @entry.pali %></dd>
-    <dt class="label">Sanskrit</dt>
-    <dd><%= @entry.sanskrit %></dd>
-    <dt class="label">Chinesisch</dt>
-    <dd><%= @entry.chinesisch %></dd>
-
-
-    <dt class="label">Tibetisch</dt>
-    <dd><%= @entry.tibetisch %></dd>
-
-    <dt class="label">Koreanisch</dt>
-    <dd><%= @entry.koreanisch %></dd>
-
-    <dt class="label">Weitere Sprachen</dt>
-    <dd><%= @entry.weitere_sprachen %></dd>
-    <dt class="label">Alternative japanische Lesungen</dt>
-    <dd><%= @entry.alternative_japanische_lesungen %></dd>
-    <dt class="label">Schreibvarianten</dt>
-    <dd><%= @entry.schreibvarianten %></dd>
-    <dt class="label">Deutsche Übersetzung</dt>
-    <dd><%= @entry.deutsche_uebersetzung %></dd>
-    <dt class="label">Art des Lemmas</dt>
-    <dd><%= @entry.lemma_art %></dd>
-    <dt class="label">Jahreszahlen</dt>
-    <dd><%= @entry.jahreszahlen %></dd>
-    <dt class="label">Übersetzung</dt>
-    <dd><%= raw(@entry.uebersetzung) %></dd>
-    <dt class="label">Quellen</dt>
-    <dd><%= raw(@entry.quellen) %></dd>
-    <dt class="label">Literatur</dt>
-    <dd><%= raw(@entry.literatur) %></dd>
-    <dt class="label">Eigene Ergänzungen</dt>
-    <dd><%= raw(@entry.eigene_ergaenzungen) %></dd>
-    <dt class="label">Quellen Ergänzungen</dt>
-    <dd><%= raw(@entry.quellen_ergaenzungen) %></dd>
-    <dt class="label">Literatur Ergänzungen</dt>
-    <dd><%= raw(@entry.literatur_ergaenzungen) %></dd>
-  </dl> 
-  <% if @entry.user == current_user || current_user.admin?%>
-    <%= link_to 'Bearbeiten', edit_entry_path(@entry) %> |
+  <% if flash[:notice] %>
+    <div class="alert alert-notice">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong><%= raw(flash[:notice]) %></strong>
+    </div>
   <% end %>
-  <%= link_to 'Zurück', entries_path %>
-  <a name="comments"></a>
-  <div class="span9">
-    <h1>Kommentare</h1>
-    <% if flash[:notice] && flash[:notice][0..6] == "Komment" %> 
-      <div class="alert alert-notice">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong><%= flash[:notice] %></strong>
-      </div>
-    <% end %>
-    <ul class="unstyled">
-      <% @entry.comments.order("updated_at DESC").each do |comment| %>
-        <li>
-        <div name="comment">
-          <strong><%= comment.user.name %> <label class="label label-info"><%= comment.user.role %></label></strong>
-          <br />
-          <%= comment.comment.to_s %>
-          <br />
-          <%= comment.updated_at.to_s %>
-        </div>
-        <% if comment.user == current_user || current_user.admin? %>
-          <div class="action">
-            <%= link_to "Löschen", comment_path(comment), method: :delete %>
-            <%= link_to "Bearbeiten", edit_comment_path(comment) %>
-          </div>
-        <% end %>
-        <hr>
-        </li>
-      <% end%>
-    </ul>
-    <%= form_for(Comment.new, :method => :post) do |f| %>
-      <fieldset>
-        <% if @comment.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
 
-            <ul>
-              <% @comment.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-              <% end %>
-            </ul>
-          </div>
-        <% end %>
-        <%= f.hidden_field :entry_id, :value => @entry.id  %>
-        <%= f.hidden_field :user_id, :value => current_user.id  %>
-        <%= f.text_area :comment, :class => "comment_field" %>
-        <div class="actions">
-          <%= f.submit("Abschicken") %>
-        </div>
-      </fieldset>
-    <% end%>
+  <%= content_tag :div, id: 'kennzahl', data: {kennzahl: @entry.kennzahl.to_i } do %>
+  <% end %>
+  <% unless @entry.freigeschaltet %>
+    <div class="scan_container">
+      <div class="funky_grey_seperator">
+        <span class="right-action"><button class= "btn" id="forward" type="button" onclick="forward_switch()">Vor</button></span>
+        <span class="right-action"><button class= "btn" id ="back" type="button" onclick="back_switch()">Zurück</button></span>
+        <span class="right-action"><button class= "btn" id ="back_first" type="button" onclick="back_first_switch()">Erste Seite</button></span>
+        <span class="left-action"><h5 id="page_count"></h5></span>
+        <% pages = to_scan_pages(@entry.kennzahl) %>
+
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[0]}_oben.jpg", style: "display: block;", id: "page0", size: '880x880'  %>
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[0]}_mitten.jpg", style: "display: none;", id: "page1", size: '880x880'  %>
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[0]}_unten.jpg", style: "display: none;", id: "page2", size: '880x880'  %>
+
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[1]}_oben.jpg", style: "display: none;", id: "page3", size: '880x880'  %>
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[1]}_mitten.jpg", style: "display: none;", id: "page4", size: '880x880'  %>
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[1]}_unten.jpg", style: "display: none;", id: "page5", size: '880x880'  %>
+
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[2]}_oben.jpg", style: "display: none;", id: "page6", size: '880x880'  %>
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[2]}_mitten.jpg", style: "display: none;", id: "page7", size: '880x880'  %>
+        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[2]}_unten.jpg", style: "display: none;", id: "page8", size: '880x880'  %>
+      </div>
+    </div>
+  <% end %>
+  <div class="down_under">
+    <div class="funky_grey_seperator">
+      <span class="right-action"> <%= link_to 'Bearbeiten', edit_entry_path(@entry), class: 'btn' %></span>
+      <span class="right-action"> <%= link_to "#{@entry.versions.size - 1 } Versionen", entry_versions_path(@entry), class: 'btn' %></span>
+      <h4>Kennungsdaten</h4>
+      <% unless @entry.user_id.blank? %>
+        <dt class="label">Verfasser</dt>
+        <dd><%= @entry.user.name %></dd>
+      <% end %>
+      <% unless @entry.namenskuerzel.blank? %>
+        <dt class="label">Namenskürzel</dt>
+        <dd><%= @entry.namenskuerzel %></dd>
+      <% end %>
+      <% unless @entry.kennzahl.blank? %>
+        <dt class="label">Kennzahl</dt>
+        <dd><%= @entry.kennzahl %></dd>
+      <% end %>
+      <% unless @entry.spaltenzahl.blank? %>
+        <dt class="label">Spaltenzahl</dt>
+        <dd><%= @entry.spaltenzahl %></dd>
+      <% end %>
+      <% unless @entry.page_reference.blank? %>
+        <dt class="label">Page Referenz</dt>
+        <dd><%= @entry.page_reference %></dd>
+      <% end %>
+
+      <% unless @entry.lemma_art.blank? %>
+        <dt class="label">Art des Lemmas</dt>
+        <dd><%= @entry.lemma_art %></dd>
+      <% end %>
+      <% unless @entry.jahreszahlen.blank? %>
+        <dt class="label">Jahreszahlen</dt>
+        <dd><%= @entry.jahreszahlen %></dd>
+      <% end %>
+      <% unless @entry.abweichende_kennzahl.blank? %>
+        <dt class="label">Abweichende Kennzahl</dt>
+        <dd><%= @entry.abweichende_kennzahl %></dd>
+      <% end %>
+      <% unless @entry.seite_textblock2005.blank? %>
+        <dt class="label">Seite Textblock 2005</dt>
+        <dd><%= @entry.seite_textblock2005 %></dd>
+      <% end %>
+    </div>
+    <div class="funky_grey_seperator">
+      <h4>Lemma-Schreibungen und -Aussprache</h4>
+      <% unless @entry.japanische_umschrift.blank? %>
+        <dt class="label">Japanische Umschrift</dt>
+        <dd><%= @entry.japanische_umschrift %></dd>
+      <% end %>
+      <% unless @entry.japanische_umschrift_din.blank? %>
+        <dt class="label">Japanische Umschrift Din</dt>
+        <dd><%= @entry.japanische_umschrift_din %></dd>
+      <% end %>
+      <% unless @entry.kanji.blank? %>
+        <dt class="label">Kanji</dt>
+        <dd><%= @entry.kanji %></dd>
+      <% end %>
+      <% unless @entry.chinesisch.blank? %>
+        <dt class="label">Chinesisch</dt>
+        <dd><%= @entry.chinesisch %></dd>
+      <% end %>
+      <% unless @entry.tibetisch.blank? %>
+        <dt class="label">Tibetisch</dt>
+        <dd><%= @entry.tibetisch %></dd>
+      <% end %>
+      <% unless @entry.koreanisch.blank? %>
+        <dt class="label">Koreanisch</dt>
+        <dd><%= @entry.koreanisch %></dd>
+      <% end %>
+      <% unless @entry.pali.blank? %>
+        <dt class="label">Pali</dt>
+        <dd><%= @entry.pali %></dd>
+      <% end %>
+      <% unless @entry.sanskrit.blank? %>
+        <dt class="label">Sanskrit</dt>
+        <dd><%= @entry.sanskrit %></dd>
+      <% end %>
+      <% unless @entry.weitere_sprachen.blank? %>
+        <dt class="label">Weitere Sprachen</dt>
+        <dd><%= @entry.weitere_sprachen %></dd>
+      <% end %>
+      <% unless @entry.alternative_japanische_lesungen.blank? %>
+        <dt class="label">Alternative japanische Lesungen</dt>
+        <dd><%= @entry.alternative_japanische_lesungen %></dd>
+      <% end %>
+      <% unless @entry.schreibvarianten.blank? %>
+        <dt class="label">Schreibvarianten</dt>
+        <dd><%= @entry.schreibvarianten %></dd>
+      <% end %>
+      <% unless @entry.lemma_in_katakana.blank? %>
+        <dt class="label">Lemma in Katakana</dt>
+        <dd><%= @entry.lemma_in_katakana %></dd>
+      <% end %>
+      <% unless @entry.lemma_in_lateinbuchstaben.blank? %>
+        <dt class="label">Lemma in Lateinbuchstaben</dt>
+        <dd><%= @entry.lemma_in_lateinbuchstaben %></dd>
+      <% end %>
+    </div>
+
+    <div class="funky_grey_seperator">
+      <h4>Übersetzungen, Quellenangaben, Literatur und Ergänzungen</h4>
+      <% unless @entry.uebersetzung.blank? %>
+        <dt class="label">Übersetzung</dt>
+        <dd><%= raw(@entry.uebersetzung) %></dd>
+      <% end %>
+      <% unless @entry.deutsche_uebersetzung.blank? %>
+        <dt class="label">Deutsche Übersetzung</dt>
+        <dd><%= @entry.deutsche_uebersetzung %></dd>
+      <% end %>
+      <% unless @entry.quellen.blank? %>
+        <dt class="label">Quellen</dt>
+        <dd><%= raw(@entry.quellen) %></dd>
+      <% end %>
+      <% unless @entry.literatur.blank? %>
+        <dt class="label">Literatur</dt>
+        <dd><%= raw(@entry.literatur) %></dd>
+      <% end %>
+      <% unless @entry.eigene_ergaenzungen.blank? %>
+        <dt class="label">Eigene Ergänzungen</dt>
+        <dd><%= raw(@entry.eigene_ergaenzungen) %></dd>
+      <% end %>
+      <% unless @entry.quellen_ergaenzungen.blank? %>
+        <dt class="label">Quellen Ergänzungen</dt>
+        <dd><%= raw(@entry.quellen_ergaenzungen) %></dd>
+      <% end %>
+      <% unless @entry.literatur_ergaenzungen.blank? %>
+        <dt class="label">Literatur Ergänzungen</dt>
+        <dd><%= raw(@entry.literatur_ergaenzungen) %></dd>
+      <% end %>
+      <% unless @entry.japanischer_quelltext.blank? %>
+        <dt class="label">Japanischer Quelltext</dt>
+        <dd><%= @entry.japanischer_quelltext %></dd>
+      <% end %>
+      <% unless @entry.japanischer_quelltext_bearbeitungsstand.blank? %>
+        <dt class="label">Japanischer Quelltext Bearbeitungsstand</dt>
+        <dd><%= @entry.japanischer_quelltext_bearbeitungsstand %></dd>
+      <% end %>
+    </div>
   </div>
+  <% if current_user %>
+    <%= render 'comments/show_comment' %>
+  <% end %>
 <% end %>

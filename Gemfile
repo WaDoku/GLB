@@ -12,8 +12,10 @@ gem 'devise-i18n-views'
 gem "rspec-rails", :group => [:test, :development]
 gem "paper_trail"
 gem "kaminari"
-gem 'bcrypt-ruby'
+gem 'bcrypt'
 gem 'cancancan'
+gem 'bootstrap-sass'
+gem 'traceroute'
 
 group :assets do
   gem 'sass-rails', '~> 5.0'
@@ -22,18 +24,18 @@ end
 
 group :development do
   gem 'pry-rails'
+  gem 'pry'
   gem 'awesome_print'
+  gem 'rvm-capistrano'
+  gem 'capistrano'
 end
 
 group :test do
   gem 'capybara'
   gem 'factory_girl_rails'
   gem 'guard-rspec'
+  gem 'launchy'
   gem 'database_cleaner'
-  gem 'pry-rails'
+  gem 'pry-byebug'
 end
 
-group :deployment do
-   gem 'capistrano'
-   gem 'rvm-capistrano'
- end

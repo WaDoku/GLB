@@ -36,12 +36,17 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     arel (6.0.3)
+    autoprefixer-rails (6.3.3.1)
+      execjs
     awesome_print (1.6.1)
     bcrypt (3.1.10)
-    bcrypt-ruby (3.1.5)
-      bcrypt (>= 3.1.3)
+    bootstrap-sass (3.3.6)
+      autoprefixer-rails (>= 5.2.1)
+      sass (>= 3.3.4)
     builder (3.2.2)
+    byebug (8.2.2)
     cancancan (1.13.1)
     capistrano (2.15.7)
       highline
@@ -116,6 +121,8 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     listen (3.0.5)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -150,6 +157,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     rack (1.6.4)
@@ -229,6 +239,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.2)
+    traceroute (0.5.0)
+      rails (>= 3.0.0)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -246,7 +258,8 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  bcrypt-ruby
+  bcrypt
+  bootstrap-sass
   cancancan
   capistrano
   capybara
@@ -258,14 +271,18 @@ DEPENDENCIES
   guard-rspec
   jquery-rails
   kaminari
+  launchy
   nokogiri
   paper_trail
+  pry
+  pry-byebug
   pry-rails
   rails (= 4.2.4)
   rspec-rails
   rvm-capistrano
   sass-rails (~> 5.0)
   sqlite3
+  traceroute
   turbolinks
   uglifier (>= 1.3.0)
 

@@ -1,220 +1,466 @@
 require 'spec_helper'
 
-# I'm a public user No ability to create
-# I'm an editor
-# I'm an admin
-# I create an Entry for myself
-# I create an Entry for other person
-
-
-describe EntriesController, :type => :controller do
-
+describe EntriesController, type: :controller do
+  let(:entry) { FactoryGirl.create(:entry) }
   let(:unpublished_entry) { FactoryGirl.create(:entry) }
   let(:published_entry) { FactoryGirl.create(:published_entry) }
+  let(:admin) { FactoryGirl.create(:admin) }
+  let(:editor) { FactoryGirl.create(:editor) }
+  let(:author) { FactoryGirl.create(:author) }
+  let(:commentator) { FactoryGirl.create(:commentator) }
+  let(:user) { FactoryGirl.create(:user) }
 
-  before :each do
-    @editor = FactoryGirl.create(:editor)
-    @admin = FactoryGirl.create(:admin)
+  before do
+    admin
+    author
   end
 
-  describe "GET index" do
-    it "returns published entries" do
-      unpublished_entry && published_entry
-      get :index
-      assigns(:entries).tap do |entries|
-        expect(entries).to include(published_entry)
-        expect(entries).to_not include(unpublished_entry)
-      end
-    end
+  describe 'Get index' do
+    subject { get :index }
+    it_behaves_like 'every user can access'
   end
 
-  describe "GET show" do
-    before :each do
-      unpublished_entry && published_entry
-    end
-
-    it "doesn't show only published entries" do
-      get :show, {:id => unpublished_entry.to_param}
-      expect(response).to redirect_to(entries_url)
-    end
-
-    it "shows published entries" do
-      get :show, {:id => published_entry.to_param}
-      assigns(:entry).should eq(published_entry)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new entry as @entry" do
-      sign_in @admin
-      get :new
-      assigns(:entry).should be_a_new(Entry)
-      sign_out @admin
-    end
-  end
-
-  describe "GET edit" do
-    before :each do
+  describe 'GET show' do
+    before do
       unpublished_entry
+      published_entry
     end
-    it "assigns the requested entry as @entry" do
-      sign_in @editor
-      unpublished_entry.user = @editor
-      unpublished_entry.reload
-      get :edit, {:id => unpublished_entry.to_param}
-      assigns(:entry).should eq(unpublished_entry)
-      sign_out @editor
+    context 'as admin, editor and author' do
+      context 'published entries' do
+        subject { put :show, id: published_entry.id }
+        it_behaves_like 'something that admin, editor & author can access'
+      end
+      context 'unpublished entries' do
+        subject { put :show, id: unpublished_entry.id }
+        it_behaves_like 'something that admin, editor & author can access'
+      end
+    end
+    context 'as commentator' do
+      before do
+        sign_in commentator
+      end
+      context 'published entries' do
+        it 'is accessible' do
+          get :show, id: published_entry.id
+          expect(response).to render_template :show
+        end
+      end
+      context 'unpublished entries' do
+        it 'is not accessible' do
+          get :show, id: unpublished_entry.id
+          expect(response).not_to render_template :show
+          expect(response).to redirect_to(root_path)
+          expect(flash[:notice]).to eq('Zugriff verwehrt')
+        end
+      end
+    end
+    context 'as guest' do
+      context 'published entries' do
+        it 'is accessible' do
+          get :show, id: published_entry.id
+          expect(response).to render_template :show
+        end
+      end
+      context 'unpublished entries' do
+        it 'is not accessible' do
+          get :show, id: unpublished_entry.id
+          expect(response).not_to render_template :show
+          expect(response).to redirect_to(root_path)
+          expect(flash[:notice]).to eq('Zugriff verwehrt')
+        end
+      end
     end
   end
 
-  describe "POST create" do
-    describe "Admin creates an entry" do
-      before :each do
-        sign_in @admin
+  describe 'GET new' do
+    it 'assigns a new entry as @entry' do
+      sign_in admin
+      get :new
+      expect(assigns(:entry)).to be_a_new(Entry)
+    end
+    context 'as admin, editor and author' do
+      subject { get :new }
+
+      it_behaves_like 'something that admin, editor & author can access'
+    end
+    context 'as commentator and guest' do
+      subject { get :new }
+
+      it_behaves_like 'something that commentator and guest can not access'
+    end
+  end
+
+  describe 'GET edit' do
+    before do
+      entry
+    end
+    context 'as admin & editor' do
+      subject { get :edit, id: entry.id }
+
+      it_behaves_like 'something that admin & editor can access'
+    end
+    context 'as author' do
+      it 'own entries can be edited' do
+        sign_in author
+        entry.update(user_id: author.id)
+        get :edit, id: entry.id
+        expect(response).to render_template(:edit)
       end
-
-      it "creates a new Entry for herself" do
-        attributes = FactoryGirl.attributes_for(:entry)
-        attributes.delete(:user_id)
-        expect {
-          post :create, :entry => attributes
-        }.to change(Entry, :count).by(1)
-
-        assigns(:entry).tap do |entry|
-          expect(entry.user).to eq(@admin)
-        end
+      it 'somebody elses entries can not be edited' do
+        sign_in author
+        entry.update(user_id: admin.id)
+        get :edit, id: entry.id
+        expect(response).not_to render_template(:edit)
       end
+    end
+    context 'as commentator and guest' do
+      subject { get :edit, id: entry.id }
 
-      context "creates an entry for another user" do
-        it "creates an entry for another editor" do
-          editor = FactoryGirl.create(:editor)
+      it_behaves_like 'something that commentator and guest can not access' 
+    end
+  end
+
+  describe 'POST create' do
+    context 'as admin' do
+      before do
+        sign_in admin
+      end
+      context 'for herself' do
+        it 'creates an entry' do
           expect {
-            post :create, :entry => FactoryGirl.attributes_for(:entry).merge({user_id: editor.id })
+            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: admin.id)
           }.to change(Entry, :count).by(1)
-
-          assigns(:entry).tap do |entry|
-            expect(entry.user).to eq(editor)
-          end
-        end
-
-        it "creates an entry for another admin" do
-          admin = FactoryGirl.create(:admin)
-          expect {
-            post :create, :entry => FactoryGirl.attributes_for(:entry).merge({user_id: admin.id })
-          }.to change(Entry, :count).by(1)
-
           assigns(:entry).tap do |entry|
             expect(entry.user).to eq(admin)
           end
         end
-
-        it "doesn't create an entry for a non admin or editor user" do
-          user = FactoryGirl.create(:user)
-
-          post :create, :entry => FactoryGirl.attributes_for(:entry).merge({user_id: user.id })
-          expect(response.code).to eq(200.to_s)
+        it 'and gets redirects to the it' do
+          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: admin.id)
+          expect(response).to redirect_to(Entry.last)
         end
       end
-
-
-      it "redirects to the created entry" do
-        post :create, :entry => FactoryGirl.attributes_for(:entry)
-        expect(response).to redirect_to(Entry.last)
-      end
-    end
-
-    describe "Editor creates an entry" do
-      before :each do
-        sign_in @editor
-      end
-
-      it "creates a new Entry for herself" do
-        attributes = FactoryGirl.attributes_for(:entry)
-        attributes.delete(:user_id)
-        expect {
-          post :create, :entry => attributes
-        }.to change(Entry, :count).by(1)
-
-        assigns(:entry).tap do |entry|
-          expect(entry.user).to eq(@editor)
+      context 'for somebody else' do
+        it 'creates an entry' do
+          expect {
+            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          }.to change(Entry, :count).by(1)
+          assigns(:entry).tap do |entry|
+            expect(entry.user).to eq(author)
+          end
+        end
+        it 'and gets redirects to the it' do
+          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          expect(response).to redirect_to(Entry.last)
         end
       end
     end
-
-    describe "User tries to creates an entry" do
-      it "creates a new Entry for herself" do
-        attributes = FactoryGirl.attributes_for(:entry)
-        attributes.delete(:user_id)
-        post :create, :entry => attributes
-        expect(response.code).to eq(302.to_s)
-        expect(response).to redirect_to(new_user_session_path)
+    context 'editor' do
+      before do
+        sign_in editor
+      end
+      context 'for herself' do
+        it 'creates an entry' do
+          expect {
+            post :create, entry: attributes = FactoryGirl.attributes_for(:entry, user_id: editor.id)
+          }.to change(Entry, :count).by(1)
+          assigns(:entry).tap do |entry|
+            expect(entry.user).to eq(editor)
+          end
+        end
+        it 'and gets redirects to the it' do
+          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+          expect(response).to redirect_to(Entry.last)
+        end
+      end
+      context 'for somebody else' do
+        it 'creates an entry' do
+          expect {
+            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          }.to change(Entry, :count).by(1)
+          assigns(:entry).tap do |entry|
+            expect(entry.user).to eq(author)
+          end
+        end
+        it 'and gets redirects to the it' do
+          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          expect(response).to redirect_to(Entry.last)
+        end
       end
     end
+    context 'author' do
+      before do
+        sign_in author
+      end
+      context 'for herself' do
+        it 'creates an entry' do
+          expect {
+            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          }.to change(Entry, :count).by(1)
+          assigns(:entry).tap do |entry|
+            expect(entry.user).to eq(author)
+          end
+        end
+        it 'and gets redirects to the it' do
+          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          expect(response).to redirect_to(Entry.last)
+        end
+      end
+      context 'for somebody else' do
+        it 'does not creates an entry' do
+          expect {
+            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+          }.to change(Entry, :count).by(0)
+        end
+      end
+      it 'gets redirects to the root path' do
+        post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+        expect(response).to redirect_to(root_path)
+      end
+      it 'and gets an error-message' do
+        post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+        expect(flash[:notice]).to eq('Zugriff verwehrt')
+      end
+    end
+    subject { post :create, entry: FactoryGirl.attributes_for(:entry) }
+
+    it_behaves_like 'something that commentator and guest can not access'
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      pending
-      it "updates the requested entry" do
-        entry = Entry.create! FactoryGirl.attributes_for(:entry)
-        # Assuming there are no other entries in the database, this
-        # specifies that the Entry created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Entry.any_instance.should_receive(:update_attributes).with({ "verfasser" => "MyString" })
-        put :update, {:id => entry.to_param, :entry => { "verfasser" => "MyString" }}
+  describe 'Get update' do
+    context 'admin' do
+      before do
+        sign_in admin
       end
-
-      it "assigns the requested entry as @entry" do
-        entry = Entry.create! FactoryGirl.attributes_for(:entry)
-        put :update, {:id => entry.to_param, :entry => FactoryGirl.attributes_for(:entry)}
-        subject { assigns(:entry) }
-        it {is_expected.to eq(entry) }
+      context 'own entry' do
+        before do
+          entry
+          entry.update(user_id: admin.id)
+          put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on my entry' }
+          entry.reload
+        end
+        it 'gets updated' do
+          expect(entry.japanische_umschrift).to eq('some editing on my entry')
+        end
+        it 'gets redirect to it' do
+          expect(response).to redirect_to(entry)
+        end
+        it 'and gets a notification' do
+          expect(flash[:notice]).not_to be_empty
+        end
       end
-
-      it "redirects to the entry" do
-        entry = Entry.create! FactoryGirl.attributes_for(:entry)
-        put :update, {:id => entry.to_param, :entry => FactoryGirl.attributes_for(:entry)}
-        expect(response).to redirect_to(entry)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns the entry as @entry" do
-        sign_in @admin
-        # Trigger the behavior that occurs when invalid params are submitted
-        Entry.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @entry.to_param, :entry => { "namenskuerzel" => "invalid value" }}
-        assigns(:entry).should eq(@entry)
-        sign_out @admin
-      end
-
-      it "re-renders the 'edit' template" do
-        sign_in @admin
-        # Trigger the behavior that occurs when invalid params are submitted
-        Entry.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @entry.to_param, :entry => { "namenskuerzel" => "invalid value" }}
-        response.should render_template("edit")
-        sign_out @admin
+      context 'other users entry' do
+        before do
+          entry
+          entry.update(user_id: author.id)
+          put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on somebody else\'s entry' }
+          entry.reload
+        end
+        it 'gets updated' do
+          expect(entry.japanische_umschrift).to eq('some editing on somebody else\'s entry')
+        end
+        it 'gets redirect to it' do
+          expect(response).to redirect_to(entry)
+        end
+        it 'and gets a notification' do
+          expect(flash[:notice]).not_to be_empty
+        end
       end
     end
+    context 'editor' do
+      before do
+        sign_in editor
+      end
+      context 'own entry' do
+        before do
+          entry
+          entry.update(user_id: editor.id)
+          put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on my entry' }
+          entry.reload
+        end
+        it 'gets updated' do
+          expect(entry.japanische_umschrift).to eq('some editing on my entry')
+        end
+        it 'gets redirect to it' do
+          expect(response).to redirect_to(entry)
+        end
+        it 'and gets a notification' do
+          expect(flash[:notice]).not_to be_empty
+        end
+      end
+      context 'other users entry' do
+        before do
+          entry
+          entry.update(user_id: author.id)
+          put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on somebody else\'s entry' }
+          entry.reload
+        end
+        it 'gets updated' do
+          expect(entry.japanische_umschrift).to eq('some editing on somebody else\'s entry')
+        end
+        it 'gets redirect to it' do
+          expect(response).to redirect_to(entry)
+        end
+        it 'and gets a notification' do
+          expect(flash[:notice]).not_to be_empty
+        end
+      end
+    end
+    context 'author' do
+      before do
+        sign_in author
+      end
+      context 'own entry' do
+        before do
+          entry
+          entry.update(user_id: author.id)
+          put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on my entry' }
+          entry.reload
+        end
+        it 'gets updated' do
+          expect(entry.japanische_umschrift).to eq('some editing on my entry')
+        end
+        it 'gets redirect to it' do
+          expect(response).to redirect_to(entry)
+        end
+        it 'and gets a notification' do
+          expect(flash[:notice]).not_to be_empty
+        end
+      end
+      context 'other users entry' do
+        before do
+          entry
+          entry.update(user_id: admin.id)
+          put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on somebody else\'s entry' }
+          entry.reload
+        end
+        it 'does not get updated' do
+          expect(entry.japanische_umschrift).not_to eq('some editing on somebody else\'s entry')
+        end
+        it 'gets redirected' do
+          expect(response).to redirect_to(root_path)
+        end
+        it 'and gets an error-message' do
+          expect(flash[:notice]).to eq('Zugriff verwehrt')
+        end
+      end
+    end
+    subject { put :update, id: entry.id, entry: { japanische_umschrift: 'different_content' } }
+
+    it_behaves_like 'something that commentator and guest can not access'
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested entry" do
-      sign_in @admin
-      expect {
-        delete :destroy, {:id => @entry.to_param}
-      }.to change(Entry, :count).by(-1)
-      sign_out @admin
+  describe 'DELETE destroy' do
+    context 'as admin' do
+      before do
+        sign_in admin
+      end
+      context 'own entries' do
+        before do
+          entry
+          entry.update(user_id: admin.id)
+        end
+        it 'can be deleted' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Entry, :count).by(-1)
+        end
+        it 'gets redirected to users entries-index' do
+          delete :destroy, id: entry.id
+          expect(response).to redirect_to(user_entries_path(admin))
+        end
+      end
+      context 'other users entries' do
+        before do
+          entry
+          entry.update(user_id: author.id)
+        end
+        it 'can be deleted' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Entry, :count).by(-1)
+        end
+        it 'gets redirected to users entries-index' do
+          delete :destroy, id: entry.id
+          expect(response).to redirect_to(user_entries_path(entry.user))
+        end
+      end
     end
+    context 'as editor' do
+      before do
+        sign_in editor
+      end
+      context 'own entries' do
+        before do
+          entry
+          entry.update(user_id: editor.id)
+        end
+        it 'can be deleted' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Entry, :count).by(-1)
+        end
+        it 'gets redirected to users entries-index' do
+          delete :destroy, id: entry.id
+          expect(response).to redirect_to(user_entries_path(editor))
+        end
+      end
+      context 'other users entries' do
+        before do
+          entry
+          entry.update(user_id: author.id)
+        end
+        it 'can be deleted' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Entry, :count).by(-1)
+        end
+        it 'gets redirected to users entries-index' do
+          delete :destroy, id: entry.id
+          expect(response).to redirect_to(user_entries_path(entry.user))
+        end
+      end
+    end
+    context 'as author' do
+      before do
+        sign_in author
+      end
+      context 'own entries' do
+        before do
+          entry
+          entry.update(user_id: author.id)
+        end
+        it 'can be deleted' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Entry, :count).by(-1)
+        end
+        it 'gets redirected to users entries-index' do
+          delete :destroy, id: entry.id
+          expect(response).to redirect_to(user_entries_path(author))
+        end
+      end
+      context 'other users entries' do
+        before do
+          entry
+          entry.update(user_id: editor.id)
+        end
+        it 'can not be deleted' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Entry, :count).by(0)
+        end
+        it 'and gets redirected' do
+          delete :destroy, id: entry.id
+          expect(response).to redirect_to(root_path)
+        end
+        it 'gets an error-message' do
+          delete :destroy, id: entry.id
+          expect(flash[:notice]).to eq('Zugriff verwehrt')
+        end
+      end
+    end
+    subject { put :destroy, id: entry.id }
 
-    it "redirects to the entries list" do
-      sign_in @admin
-      delete :destroy, {:id => @entry.to_param}
-      response.should redirect_to(entries_url)
-      sign_out @admin
-    end
+    it_behaves_like 'something that commentator and guest can not access'
   end
-
 end
