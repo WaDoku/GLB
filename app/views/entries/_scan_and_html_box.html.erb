@@ -28,17 +28,4 @@
       <% end %>
     </ul>
   </div>
-  <div class="well sidebar-nav">
-    <ul class="nav nav-list">
-      <li class="nav-header">Sonderzeichen für Sanskrit-Transliteration</li>
-      <li>
-        <% sanskrit_special_chars.each_with_index do |char, i| %>
-          <% if i % 11 == 0 && i > 1 %>
-        </li><li>
-        <% end %>
-        <span class="special_chars"><%= char %></span>
-      <% end %>
-        </li>
-    </ul>
-  </div>
 <% end %>
