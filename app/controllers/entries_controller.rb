@@ -98,10 +98,10 @@ class EntriesController < ApplicationController
     redirect_to entries_url
   end
   def sort_column
-    Entry.column_names.include?(params[:sort]) ? params[:sort] : "kennzahl"
+    Entry.column_names.include?(params[:sort]) ? params[:sort] : "japanische_umschrift"
   end
   
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end
