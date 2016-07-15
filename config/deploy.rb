@@ -2,7 +2,6 @@
 require "bundler/capistrano"
 require "capistrano/ext/multistage"
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
-require 'capistrano/rails/assets'
 set :rvm_ruby_string, :local
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
 
