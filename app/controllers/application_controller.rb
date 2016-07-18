@@ -9,10 +9,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  # def current_user
-  #   super || User.new(role: 'guest') #methoden auftruf der superklasse
-  # end
-
   def record_not_found
     redirect_to root_path
   end
