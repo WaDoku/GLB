@@ -81,10 +81,13 @@ end
 namespace :rake do
   desc "Invoke rake task"
   task :invoke do
-    run "cd #{current_path} && bundle exec rake #{ENV['task']} RAILS_ENV=#{rails_env} --trace"
+    run "cd #{current_path} && bundle exec rake #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
   end
   task :migrate do
-    run "cd #{current_path} && bundle exec rake db:migrate #{ENV['task']} RAILS_ENV=#{rails_env} --trace"
+    run "cd #{current_path} && bundle exec rake db:migrate #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
+  end
+  task :assets do
+    run "cd #{current_path} && bundle exec rake assets:precompile #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
   end
 end
 
@@ -93,3 +96,5 @@ after "deploy:setup", "db_setup:create_shared"
 after "deploy:update_code", "deploy:fix_ownership"
 after "deploy:restart", "deploy:cleanup"
 after "rake:invoke", "deploy:fix_ownership"
+after "rake:migrate", "deploy:fix_ownership"
+after "rake:assets", "deploy:fix_ownership"
