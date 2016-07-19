@@ -7,11 +7,9 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container navbar-container">
-          <%# <%= link_to "GLB", entries_path, :class => 'brand' %1> %>
           <%= link_to "GLB", root_path, :class => 'brand' %>
           <ul class="nav">
             <% if can?(:index, User) %>
@@ -43,17 +41,13 @@
             <% if current_user %>
               <li><%= link_to "Tutorial", tutorial_path, :method => :get, :target => "_self" %></li>
             <% end %>
-          </ul>
 
-          <% unless current_user %>
-            <ul class="nav pull-right">
+          <%# <ul class="nav pull-right"> %>
+            <% unless current_user %>
               <li class="dropdown">
                 <%= link_to "Login", new_user_session_path %>
               </li>
-            </ul>
-          <% else %>
-            <ul class="nav pull-right">
-              <%# <li><%= link_to "#{current_user.email} abmelden.", destroy_user_session_path, :method => :delete %1></li> %>
+            <% else %>
               <li class="dropdown">
                 <a class='dropdown-toggle' data-toggle='dropdown' href='#'><%= current_user.name %></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
@@ -64,12 +58,12 @@
                   <li><%= link_to "Abmelden", destroy_user_session_path, :method => :delete %></li>
                 </ul>
               </li>
-            </ul>
-          <% end%>
+            <% end%>
+          <%# </ul> %>
+          </ul>
         </div>
       </div>
     </div>  
-
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span3 sidebar-nav-fixed">
@@ -83,7 +77,5 @@
     <div class="container-fluid2">
       <%= yield :content_2%>
     </div>
-
-
   </body>
 </html>
