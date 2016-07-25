@@ -10,8 +10,11 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container navbar-container">
-          <%= link_to "GLB", root_path, :class => 'brand' %>
           <ul class="nav">
+            <li>
+              <%= link_to "GLB", root_path, :class => 'brand' %>
+            </li>
+
             <% if can?(:index, User) %>
               <li class="dropdown">
                 <a class='dropdown-toggle' data-toggle='dropdown' href='#'>Mitarbeiter</a>
@@ -42,7 +45,7 @@
               <li><%= link_to "Tutorial", tutorial_path, :method => :get, :target => "_self" %></li>
             <% end %>
 
-          <%# <ul class="nav pull-right"> %>
+          <ul class="nav pull-right">
             <% unless current_user %>
               <li class="dropdown">
                 <%= link_to "Login", new_user_session_path %>
@@ -59,7 +62,7 @@
                 </ul>
               </li>
             <% end%>
-          <%# </ul> %>
+          </ul>
           </ul>
         </div>
       </div>

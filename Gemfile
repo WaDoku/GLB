@@ -14,8 +14,6 @@ gem "paper_trail"
 gem "kaminari"
 gem 'bcrypt'
 gem 'cancancan'
-gem 'bootstrap-sass'
-gem 'traceroute'
 
 group :assets do
   gem 'sass-rails', '~> 5.0'
