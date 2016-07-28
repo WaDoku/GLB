@@ -60,6 +60,7 @@ namespace :db_setup do
     run "chmod -R 1777 #{deploy_to}/#{shared_dir}/docs/"
     run "mkdir -p #{deploy_to}/#{shared_dir}/htms/"
     run "chmod -R 1777 #{deploy_to}/#{shared_dir}/htms/"
+    run "touch #{deploy_to}/#{shared_dir}/assets/.sprockets-manifest.json"
   end
 
   task :link_shared do
