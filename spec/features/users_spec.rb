@@ -53,7 +53,7 @@ describe 'users management' do # check test-descriptions and redundancies betwee
     end
     it "should show user's information" do
       visit users_path
-      first(:link, 'Anzeigen').click
+      first(:link, 'Nutzereinträge anzeigen').click
       expect(page).to have_content('Einträge')
     end
     it "can change user's role" do
