@@ -1,18 +1,8 @@
 <% content_for :content do %>
-  <% if flash[:notice] %>
-    <div class="alert alert-notice">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <strong><%= raw(flash[:notice]) %></strong>
-    </div>
-  <% end %>
   <div class="row">
     <div class="span9 offset0">
-      </br>
       <h1>Neuer Eintrag</h1>
-      </br>
       <%= render 'entries/form' %>
-      </br>
-      <%= link_to 'Zurück', entries_path %>
     </div>
   </div>
 <% end %>

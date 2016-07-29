@@ -65,10 +65,7 @@ describe UsersController, type: :controller do
           }.to_not change(User, :count)
         end
         it 'redirects to the new-template' do
-          expect(response).to redirect_to(new_user_path)
-        end
-        it 'shows an error-message' do
-          expect(flash[:notice]).not_to be_empty
+          expect(response).to render_template(:new)
         end
       end
     end

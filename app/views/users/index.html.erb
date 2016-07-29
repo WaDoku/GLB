@@ -1,10 +1,4 @@
 <% content_for :content do %>
-  <% if flash[:notice] %>
-    <div class="alert alert-notice">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <strong><%= raw(flash[:notice]) %></strong>
-    </div>
-  <% end %>
   <h1>Alle Mitarbeiter</h1>
 
   <table class="table">
@@ -13,8 +7,7 @@
       <th>Email</th>
       <th>Status</th>
       <th>Einträge</th>
-      <th></th>
-      <th></th>
+      <th>Operationen</th>
     </tr>
 
     <% @users.each do |user| %>

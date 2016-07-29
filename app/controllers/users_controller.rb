@@ -11,10 +11,6 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @user }
-    end
   end
 
   def create
@@ -24,7 +20,7 @@ class UsersController < ApplicationController
         format.html { redirect_to users_path, notice: 'Mitarbeiter erfolgreich erstellt!' }
         format.json { render json: @user, role: :created, location: @user }
       else
-        format.html { redirect_to new_user_path, notice: @user.errors.messages.values.flatten.uniq.join('<br/>') } # ?
+        format.html { render 'new' } 
         format.json { render json: @user.errors, role: :unprocessable_entity }
       end
     end
@@ -39,7 +35,7 @@ class UsersController < ApplicationController
         format.html { redirect_to users_path, notice: 'Mitarbeiter erfolgreich bearbeitet' }
         format.json { head :no_content }
       else
-        format.html { redirect_to edit_user_path(@user), notice: @user.errors.messages.values.flatten.uniq.join('<br />') } # ?
+        format.html { render 'edit' } 
         format.json { render json: @user.errors, role: :unprocessable_entity }
       end
     end

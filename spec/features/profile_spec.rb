@@ -34,7 +34,7 @@ describe 'user profile management' do
       fill_in 'user_name', with: 'Michael Jackson'
       fill_in 'user_email', with: ''
       click_button('Speichern')
-      expect(page).to have_content('Zugriff verwehrt')
+      expect(page).to have_content('The form contains 1 error.')
     end
   end
 end

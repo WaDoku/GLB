@@ -8,7 +8,7 @@ class ProfilesController < ApplicationController
     if current_user.update(user_params)
       redirect_to edit_profile_path, notice: 'Profil erfolgreich bearbeitet'
     else
-      redirect_to edit_profile_path, notice: 'Zugriff verwehrt'
+     render 'edit' 
     end
   end
 

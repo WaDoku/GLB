@@ -48,11 +48,8 @@ describe ProfilesController, type: :controller do
           put :update, id: author.id, user: { email: '' }
           author.reload
         end
-        it 'redirects to the edit-view' do
-          expect(response).not_to render_template(:edit)
-        end
-        it 'returns an error-message' do
-          expect(flash[:notice]).to eq('Zugriff verwehrt')
+        it 'renders the edit action' do
+          expect(response).to render_template(:edit)
         end
       end
     end
