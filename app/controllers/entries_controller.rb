@@ -3,8 +3,6 @@ class EntriesController < ApplicationController
   before_action :build_entry_comment, only: :show
   helper_method :sort_column, :sort_direction
 
-  # uncomment sḱip_before_filter to make entries visible; (preferably in connection with published filter)
-  #skip_before_filter :authenticate_user!, only: [:index, :show]
   def index
     if params[:search]
       @entries = Entry.search(params[:search]).page(params[:page])
@@ -30,10 +28,6 @@ class EntriesController < ApplicationController
 
   def new
     @entry = Entry.new
-    respond_to do |format|
-      format.html 
-      format.json { render json: @entry }
-    end
   end
 
   def edit
