@@ -1,13 +1,11 @@
 <%= form_for @entry do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="funky_grey_seperator">
-    </br>
-    </br>
-    <span class="right-action"><%= f.submit 'Speichern', class: 'btn' %></span>
-    <h4>Kennungsdaten</h4>
-    <span class="right-action"> <%= link_to 'Anzeigen', @entry, class: 'btn' %></span>
-    </br>
-    </br>
+    <div style="margin-bottom: 2em">
+      <span class="right-action"><%= f.submit 'Speichern', class: 'btn' %></span>
+      <h4>Kennungsdaten</h4>
+      <span class="right-action"> <%= link_to 'Anzeigen', @entry, class: 'btn' %></span>
+    </div>
     <% if can?(:manage, @entry) %>
       <%= f.label :verfasser %>
       <%= select("entry", "user_id", User.all.collect {|user| [ user.name, user.id ] }, { :selected => current_user.id}) %>
@@ -26,13 +24,9 @@
     <%= f.text_field :abweichende_kennzahl%>
     <%= f.label :seite_textblock2005, 'Seite Textblock 2005' %>
     <%= f.text_field :seite_textblock2005 %>
-    </br>
-    </br>
   </div>
   <div class="funky_grey_seperator">
     <h4>Lemma-Schreibungen und -Aussprachen</h4>
-    </br>
-    </br>
     <%= f.label :japanische_umschrift%>
     <%= f.text_field :japanische_umschrift %>
     <%= f.label :japanische_umschrift_din, 'Japanische Umschrift Din' %>
@@ -59,13 +53,9 @@
     <%= f.text_field :lemma_in_katakana %>
     <%= f.label :lemma_in_lateinbuchstaben, 'Lemma in Lateinbuchstaben' %>
     <%= f.text_field :lemma_in_lateinbuchstaben %>
-    </br>
-    </br>
   </div>
   <div class="funky_grey_seperator">
     <h4>Übersetzungen, Quellenangaben, Literatur und Ergänzungen</h4>
-    </br>
-    </br>
     <%= f.label :lemma_art %>
     <%= f.select :lemma_art, ["", "Person", "Tempel", "Werk", "Fachtermini", "Geographische Bezeichnung", "Ereignis"] %> 
     <%= f.label :jahreszahlen %>

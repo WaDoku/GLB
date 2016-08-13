@@ -10,36 +10,25 @@ class CommentsController < ApplicationController
   def create
     @comment = @entry.comments.build(comment_params)
     @comment.user_id = current_user.id
-    respond_to do |format|
-      if @comment.save
-        format.html { redirect_to entry_path(@entry), notice: 'Kommentar erfolgreich erstellt.' }
-        format.json { render :show, status: :created, location: @comment } # ????
-      else
-        flash[:notice] = 'Kommentar konnte nicht erstellt werden.'
-        format.html { render 'entries/show' }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
+    if @comment.save
+      redirect_to entry_path(@entry), notice: 'Kommentar erfolgreich erstellt.'
+    else
+      flash[:notice] = 'Kommentar konnte nicht erstellt werden.'
+      render 'entries/show'
     end
   end
 
   def update
-    respond_to do |format|
-      if @comment.update_attributes(comment_params)
-        format.html { redirect_to entry_path(@entry), notice: 'Kommentar erfolgreich bearbeitet.' }
-        format.json { head :no_content }      
-      else
-        format.html { render 'entries/show' }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
+    if @comment.update_attributes(comment_params)
+      redirect_to entry_path(@entry), notice: 'Kommentar erfolgreich bearbeitet.'
+    else
+      render 'entries/show'
     end
   end
 
   def destroy
     @comment.destroy
-    respond_to do |format|
-      format.html { redirect_to entry_path(@comment.entry), notice: 'Kommentar erfolgreich gelöscht.' }
-      format.json { head :no_content }
-    end
+    redirect_to entry_path(@comment.entry), notice: 'Kommentar erfolgreich gelöscht.'
   end
 
   private

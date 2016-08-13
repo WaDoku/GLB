@@ -2,29 +2,30 @@
   <div class="well sidebar-nav">
     <ul class="nav nav-list">
       <% if @user.id == current_user.id %>
-      <li class="nav-header"><%= "Meine Einträge Durchsuchen" %></li>
+      <li class="nav-header"><%= "Meine Einträge Durchsuchen" %>
     <% else %>
-      <li class="nav-header"><%= "#{@user.name}'s Einträge Durchsuchen" %></li>
+      <li class="nav-header"><%= "#{@user.name}'s Einträge Durchsuchen" %>
     <% end %>
-      </br>
-      <%= form_tag user_entries_path(@user), method: "get" do %>
-        <%= text_field_tag :search, params[:search] %>
-        <%= submit_tag "Suche", name: nil, class: "btn"  %>
-      <% end %>
+        <div style="margin-top: 20px">
+          <%= form_tag user_entries_path(@user), method: "get" do %>
+            <%= text_field_tag :search, params[:search] %>
+            <%= submit_tag "Suche", name: nil, class: "btn"  %>
+          <% end %>
+        </div>
+      </li>
     </ul>
   </div>
   <div class="well sidebar-nav">
     <ul class="nav nav-list">
       <li class="nav-header">Sortieren</li>
-      <br>
+    </ul>
+    <div style="margin-top: 20px">
       <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
           Felder Auswahl 
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li><%= sortable 'kennzahl', 'Kennzahl', 'asc' %></li>
-          <li><%= sortable 'kennzahl', 'Kennzahl (reversed)', 'desc' %></li>
           <li><%= sortable 'japanische_umschrift', 'Japanische Umschrift', 'asc' %></li>
           <li><%= sortable 'japanische_umschrift', 'Japanische Umschrift (reversed)', 'desc' %></li>
           <li><%= sortable 'id', 'Id', 'asc' %></li>
@@ -33,7 +34,7 @@
           <li><%= sortable 'kanji', 'Kanji (reversed)', 'desc' %></li>
         </ul>
       </div>
-    </ul>
+    </div>
   </div>
 <% end %>
 
@@ -74,9 +75,7 @@
         <td><%= entry.kanji %></td>
         <td><%= link_to 'Anzeigen', entry %>
         <% if current_user.admin? || current_user.editor? || (current_user.author? && entry.user_id == current_user.id) %>
-          <br/>
           <%= link_to 'Bearbeiten', edit_entry_path(entry) %>
-          <br/>
           <%= link_to 'Löschen', entry, method: :delete, data: { confirm: 'Wollen Sie diesen Eintrag wirklich löschen?' }%>
         <% end %>
         </td>

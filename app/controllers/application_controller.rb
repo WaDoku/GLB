@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  protect_from_forgery :except => :receive_guest
+  protect_from_forgery except: :receive_guest
   layout :layout_by_resource
 
-  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
-  rescue_from CanCan::AccessDenied do |exception|
-    flash[:notice] = "Zugriff verwehrt"
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from CanCan::AccessDenied do
+    flash[:notice] = 'Zugriff verwehrt'
     redirect_to root_path
   end
 
@@ -15,36 +15,14 @@ class ApplicationController < ActionController::Base
 
   def layout_by_resource
     if devise_controller?
-      "devise"
+      'devise'
     else
-      "application"
+      'application'
     end
-  end
-
-  def admin?
-    current_user && current_user.admin?
-  end
-
-  def editor?
-    current_user && current_user.editor?
-  end
-
-  def author?
-    current_user && current_user.author?
-  end
-  
-
-  def commentator?
-    current_user && current_user.commentator?
-  end
-
-  def guest?
-    current_user
   end
 
   def current_user?
     @user = User.find(params[:id])
     current_user.id == @user.id
   end
-
 end

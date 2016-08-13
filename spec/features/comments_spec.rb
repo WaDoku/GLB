@@ -14,7 +14,7 @@ describe 'comments management' do
     it 'edits a comment' do
       comment.update(comment: 'previous comment content', entry_id: entry.id)
       visit entry_path(entry)
-      within('.down_comments') do
+      within('.unstyled') do
         click_link('Bearbeiten')
       end
       fill_in 'comment_comment', with: 'new comment-content'
@@ -37,7 +37,7 @@ describe 'comments management' do
     it 'deletes a comment' do
       comment.update(entry_id: entry.id)
       visit entry_path(entry)
-      within('.down_comments') do
+      within('.unstyled') do
         click_link('Löschen')
       end
       expect(page).not_to have_content(comment.comment)
