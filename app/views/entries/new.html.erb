@@ -1,8 +1,8 @@
 <% content_for :content do %>
-  <h1>Neuer Eintrag</h1>
-
-  <%= form_for(Entry.new, :method => :post, :html => {:class => "form"})  do |f| %>
-    <%= render :partial => 'entries/form', :locals => {:f => f}%>
-  <% end %>
-  <%= link_to 'Zurück', entries_path %>
+  <div class="row">
+    <div class="span9 offset0">
+      <h1>Neuer Eintrag</h1>
+      <%= render 'entries/form' %>
+    </div>
+  </div>
 <% end %>

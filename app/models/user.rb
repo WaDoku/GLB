@@ -1,27 +1,39 @@
 class User < ActiveRecord::Base
   has_many :entries
   has_many :comments
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable,
-  # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates :name, presence: true
-  validates :email, presence: true
-
-  scope :allowed_for_entries, ->{ where( role: ['admin', 'editor']) }
+  # divise-validatable validates presence of email and password
+  validates :name, :role, presence: true
+  scope :allowed_for_entries, -> { where(role: %w(admin editor author commentator)) }
+  before_destroy :check_for_remaining_entries
 
   def admin?
-    role == "admin"
+    role == 'admin'
   end
 
   def editor?
-    role == "editor"
+    role == 'editor'
   end
 
-  def search_entries(query)
-    self.entries.where("japanische_umschrift LIKE ? OR kanji LIKE ? OR namenskuerzel = ? OR kennzahl = ? OR romaji_order LIKE ?", "%#{query}%", "%#{query}%", "#{query}", "#{query}", "%#{query}%")
+  def author?
+    role == 'author'
   end
 
+  def commentator?
+    role == 'commentator'
+  end
+
+  def guest?
+    role == 'guest'
+  end
+
+  def self.default_admin
+    find_by_email('ulrich.apel@uni-tuebingen.de')
+  end
+
+  def check_for_remaining_entries
+    raise 'User still holds entries' if entries.any?
+  end
 end

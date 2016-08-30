@@ -1,36 +1,46 @@
-#encoding: utf-8
+# encoding: utf-8
 FactoryGirl.define do
-
   factory :user do
-    sequence(:email){|n| "normal_user#{n}@example.com"}
-    sequence(:name){|n| "normal_user#{n}"}
-    password "anything"
-    password_confirmation "anything"
-    role "user"
+    sequence(:email) { |n| "normal_user#{n}@example.com" }
+    sequence(:name) { |n| "normal_user#{n}" }
+    password 'anything'
+    password_confirmation 'anything'
+    role 'user'
   end
 
   factory :admin, parent: :user do
-    role "admin"
-    sequence(:email){|n| "admin_#{n}@example.com"}
-    sequence(:name){|n| "admin#{n}"}
+    role 'admin'
+    sequence(:email) { |n| "admin_#{n}@example.com" }
+    sequence(:name) { |n| "admin#{n}" }
   end
 
   factory :editor, parent: :user do
-    sequence(:email){|n| "editor_#{n}@example.com"}
-    sequence(:name){|n| "editor#{n}"}
-    role "editor"
+    sequence(:email) { |n| "editor_#{n}@example.com" }
+    sequence(:name) { |n| "editor#{n}" }
+    role 'editor'
+  end
+
+  factory :author, parent: :user do
+    sequence(:email) { |n| "author#{n}@example.com" }
+    sequence(:name) { |n| "author#{n}" }
+    role 'author'
+  end
+
+  factory :commentator, parent: :user do
+    sequence(:email) { |n| "commentator_#{n}@example.com" }
+    sequence(:name) { |n| "commentator#{n}" }
+    role 'commentator'
+  end
+
+  factory :guest, parent: :user do
+    role 'guest'
   end
 
   factory :entry, class: Entry do
     user_id { FactoryGirl.create(:admin).id }
-    namenskuerzel "ES"
-    kennzahl "981:1"
-    spaltenzahl "17"
-    japanische_umschrift "chi {muchi}"
-    kanji "癡 (無癡)"
-    chinesisch "chi {wuchi}"
-    deutsche_uebersetzung "Torheit, Dummheit {Nicht-Torheit}"
-    uebersetzung "Torheit, Dummheit {Nicht-Torheit}"
+    kennzahl '981:1'
+    japanische_umschrift 'chi {muchi}'
+    deutsche_uebersetzung 'Torheit, Dummheit {Nicht-Torheit}'
   end
 
   factory :published_entry, parent: :entry do
@@ -38,8 +48,8 @@ FactoryGirl.define do
   end
 
   factory :comment, class: Comment do
-    entry {create :entry}
-    user {create :editor}
-    comment "Test comment!"
+    user_id { FactoryGirl.create(:admin).id }
+    entry_id { FactoryGirl.create(:entry).id }
+    comment 'Test comment!'
   end
 end

@@ -6,8 +6,8 @@
       <th>Name</th>
       <th>Email</th>
       <th>Status</th>
-      <th></th>
-      <th></th>
+      <th>Einträge</th>
+      <th>Operationen</th>
     </tr>
 
     <% @users.each do |user| %>
@@ -15,9 +15,12 @@
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td><%= user.role.capitalize %></td>
-        <td><%= link_to 'Anzeigen', user %>
-        <%= link_to "Status Ändern", edit_user_path(user, @user) %>
+        <td><%= user.entries.count %></td>
+        <td><%= link_to 'Nutzereinträge anzeigen', user_entries_path(user) %>
+        <% if current_user.admin? %>
+         | <%= link_to "Status Ändern", edit_user_path(user) %>
          | <%= link_to 'Löschen', user, method: :delete, data: { confirm: 'Wollen Sie diesen Mitarbeiter wirklich löschen?' } %>
+       <% end %>
       </tr>
     <% end %>
   </table>

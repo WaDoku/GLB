@@ -1,74 +1,48 @@
-<% content_for :sidebar do %>
-  <div class="well sidebar-nav">
-    <ul class="nav nav-list">
-      <li class="nav-header">Suche</li>
-      <%= form_tag entries_path, method: "get", id: "search_form", target: "_self" do %>
-        <fieldset>
-          <li>
-            <label for="search">Suchbegriff</label>
-            <input type="text" id="search" name="search" class="span12" value="<%= params[:search] %>"></input>
-          </li>
-        <fieldset>
-        <li>
-          <button id="search_button" class="btn">Suchen</button>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
+<%= render 'entries/search_and_sort_box' %>
 <% content_for :content do %>
-  <% if flash[:notice] %>
-    <div class="alert alert-notice">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <strong><%= raw(flash[:notice]) %></strong>
-    </div>
-  <% end %>
-  <h1>Alle Einträge</h1>
+  <h1>Das Große Lexikon des Buddhismus</h1>
   <span class="label"><%= @count %>
-    <%= @count > 1 ? "Einträge" : "Eintrag" %>
+  <%= @count > 1 ? "Einträge" : "Eintrag" %>
   </span>
-
   <%= paginate @entries %>
   <table class="table table-striped">
-    <tr>
-      <th>Verfasser</th>
-      <th>Namenskürzel</th>
-      <th>Kennzahl</th>
-      <th>Japanische umschrift</th>
-      <th>Kanji</th>
-      <th>Aktionen</th>
-      <th>Kommentar</th>
-    </tr>
-
     <% @entries.each do |entry| %>
-      <tr>
-        <td><%= entry.user.name %></td>
-        <td><%= entry.namenskuerzel %></td>
-        <td><%= entry.kennzahl %></td>
-        <td><%= entry.japanische_umschrift %></td>
-        <td><%= entry.kanji %></td>
-        <td><%= link_to 'Anzeigen', entry %>
-        <% if entry.user == current_user || current_user.admin? %>
-          <br/>
-          <%= link_to 'Bearbeiten', edit_entry_path(entry) %>
-        <% end %>
-        <% if current_user.admin? %>
-          <br/>
-          <%= link_to 'Löschen', entry, method: :delete, data: { confirm: 'Wollen Sie diesen Eintrag wirklich löschen?' }%>
-        <% end %>
-        </td>
+      <tr class="index-text-container" >
         <td>
-          <% if entry.comments.length != 0 %>
-            <%= link_to entry.comments.length, entry_path(entry) + "#comments", :class => "badge badge-important comments" %>
+          <% unless entry.japanische_umschrift.blank? %>
+          <strong> <%= entry.japanische_umschrift %></strong>
+        <% end %>
+
+        <% unless entry.kanji.blank? %>
+          <strong> | <%= entry.kanji %></strong>
+        <% end %>
+
+        <% unless entry.kennzahl.blank? %>
+          <strong> | <%= entry.kennzahl%></strong>
+        <% end %>
+        <span class="right-action">             
+          <% if can?(:show, entry) && entry.comments.present? && current_user %>
+            <% @count_me = entry.comments.count %>
+            <% @comment_me = entry.comments.count > 1 ? "Kommentare" : "Kommentar" %>
+            <%= link_to "#{@count_me} #{@comment_me}", entry %> |
           <% end %>
-          <% if entry.freigeschaltet %>
-            <span class="label label-success">Freigeschaltet</span>
+
+          <% if can?(:show, entry) %>
+            <%= link_to 'Anzeigen', entry %>
           <% end %>
+        </span>
         </td>
       </tr>
+      <% if entry.uebersetzung.present? && can?(:show, entry) %>
+        <tr class="index-text-container_truncate" >
+          <td>
+            <%= raw(entry.uebersetzung.truncate(2000)) %>
+          </td>
+        </tr>
+      <% else %>
+        <tr></tr>
+      <% end %>
     <% end %>
   </table>
   <%= paginate @entries %>
-
 <% end %>

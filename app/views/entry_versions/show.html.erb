@@ -1,0 +1,146 @@
+<% content_for :content do %>
+  <h1>Version: <%= @version_number %> <span style="font-size: 0.5em">Erstellt am: <%= @entry_created_at.strftime('%b %d, %Y')%></span></h1>
+  <div class="funky_grey_seperator">
+    <span class="right-action"> <%= link_to 'Aktuelle Version', entry_path(@entry), class: 'btn' %></span>
+    <span class="right-action"> <%= link_to 'Versionsindex', entry_versions_path(@entry), class: 'btn' %></span>
+    <h4>Kennungsdaten</h4>
+    <dl class="dl">
+      <% unless @entry.user_id.blank? %>
+	<dt class="label">Verfasser</dt>
+	<dd><%= @entry.user.name %></dd>
+      <% end %>
+      <% unless @entry.namenskuerzel.blank? %>
+	<dt class="label">Namenskürzel</dt>
+	<dd><%= @entry.namenskuerzel %></dd>
+      <% end %>
+      <% unless @entry.kennzahl.blank? %>
+	<dt class="label">Kennzahl</dt>
+	<dd><%= @entry.kennzahl %></dd>
+      <% end %>
+      <% unless @entry.spaltenzahl.blank? %>
+	<dt class="label">Spaltenzahl</dt>
+	<dd><%= @entry.spaltenzahl %></dd>
+      <% end %>
+      <% unless @entry.page_reference.blank? %>
+	<dt class="label">Page Referenz</dt>
+	<dd><%= @entry.page_reference %></dd>
+      <% end %>
+
+      <% unless @entry.lemma_art.blank? %>
+	<dt class="label">Art des Lemmas</dt>
+	<dd><%= @entry.lemma_art %></dd>
+      <% end %>
+      <% unless @entry.jahreszahlen.blank? %>
+	<dt class="label">Jahreszahlen</dt>
+	<dd><%= @entry.jahreszahlen %></dd>
+      <% end %>
+      <% unless @entry.abweichende_kennzahl.blank? %>
+	<dt class="label">Abweichende Kennzahl</dt>
+	<dd><%= @entry.abweichende_kennzahl %></dd>
+      <% end %>
+      <% unless @entry.seite_textblock2005.blank? %>
+	<dt class="label">Seite Textblock 2005</dt>
+	<dd><%= @entry.seite_textblock2005 %></dd>
+      <% end %>
+    </dl>
+  </div>
+  <div class="funky_grey_seperator">
+    <h4>Lemma-Schreibungen und -Aussprache</h4>
+    <dl class="dl">
+      <% unless @entry.japanische_umschrift.blank? %>
+	<dt class="label">Japanische Umschrift</dt>
+	<dd><%= @entry.japanische_umschrift %></dd>
+      <% end %>
+      <% unless @entry.japanische_umschrift_din.blank? %>
+	<dt class="label">Japanische Umschrift Din</dt>
+	<dd><%= @entry.japanische_umschrift_din %></dd>
+      <% end %>
+      <% unless @entry.kanji.blank? %>
+	<dt class="label">Kanji</dt>
+	<dd><%= @entry.kanji %></dd>
+      <% end %>
+      <% unless @entry.chinesisch.blank? %>
+	<dt class="label">Chinesisch</dt>
+	<dd><%= @entry.chinesisch %></dd>
+      <% end %>
+      <% unless @entry.tibetisch.blank? %>
+	<dt class="label">Tibetisch</dt>
+	<dd><%= @entry.tibetisch %></dd>
+      <% end %>
+      <% unless @entry.koreanisch.blank? %>
+	<dt class="label">Koreanisch</dt>
+	<dd><%= @entry.koreanisch %></dd>
+      <% end %>
+      <% unless @entry.pali.blank? %>
+	<dt class="label">Pali</dt>
+	<dd><%= @entry.pali %></dd>
+      <% end %>
+      <% unless @entry.sanskrit.blank? %>
+	<dt class="label">Sanskrit</dt>
+	<dd><%= @entry.sanskrit %></dd>
+      <% end %>
+      <% unless @entry.weitere_sprachen.blank? %>
+	<dt class="label">Weitere Sprachen</dt>
+	<dd><%= @entry.weitere_sprachen %></dd>
+      <% end %>
+      <% unless @entry.alternative_japanische_lesungen.blank? %>
+	<dt class="label">Alternative japanische Lesungen</dt>
+	<dd><%= @entry.alternative_japanische_lesungen %></dd>
+      <% end %>
+      <% unless @entry.schreibvarianten.blank? %>
+	<dt class="label">Schreibvarianten</dt>
+	<dd><%= @entry.schreibvarianten %></dd>
+      <% end %>
+      <% unless @entry.lemma_in_katakana.blank? %>
+	<dt class="label">Lemma in Katakana</dt>
+	<dd><%= @entry.lemma_in_katakana %></dd>
+      <% end %>
+      <% unless @entry.lemma_in_lateinbuchstaben.blank? %>
+	<dt class="label">Lemma in Lateinbuchstaben</dt>
+	<dd><%= @entry.lemma_in_lateinbuchstaben %></dd>
+      <% end %>
+    </dl>
+  </div>
+
+  <div class="funky_grey_seperator">
+    <h4>Übersetzungen, Quellenangaben, Literatur und Ergänzungen</h4>
+    <dl class="dl">
+      <% unless @entry.uebersetzung.blank? %>
+	<dt class="label">Übersetzung</dt>
+	<dd><%= raw(@entry.uebersetzung) %></dd>
+      <% end %>
+      <% unless @entry.deutsche_uebersetzung.blank? %>
+	<dt class="label">Deutsche Übersetzung</dt>
+	<dd><%= @entry.deutsche_uebersetzung %></dd>
+      <% end %>
+      <% unless @entry.quellen.blank? %>
+	<dt class="label">Quellen</dt>
+	<dd><%= raw(@entry.quellen) %></dd>
+      <% end %>
+      <% unless @entry.literatur.blank? %>
+	<dt class="label">Literatur</dt>
+	<dd><%= raw(@entry.literatur) %></dd>
+      <% end %>
+      <% unless @entry.eigene_ergaenzungen.blank? %>
+	<dt class="label">Eigene Ergänzungen</dt>
+	<dd><%= raw(@entry.eigene_ergaenzungen) %></dd>
+      <% end %>
+      <% unless @entry.quellen_ergaenzungen.blank? %>
+	<dt class="label">Quellen Ergänzungen</dt>
+	<dd><%= raw(@entry.quellen_ergaenzungen) %></dd>
+      <% end %>
+      <% unless @entry.literatur_ergaenzungen.blank? %>
+	<dt class="label">Literatur Ergänzungen</dt>
+	<dd><%= raw(@entry.literatur_ergaenzungen) %></dd>
+      <% end %>
+      <% unless @entry.japanischer_quelltext.blank? %>
+	<dt class="label">Japanischer Quelltext</dt>
+	<dd><%= @entry.japanischer_quelltext %></dd>
+      <% end %>
+      <% unless @entry.japanischer_quelltext_bearbeitungsstand.blank? %>
+	<dt class="label">Japanischer Quelltext Bearbeitungsstand</dt>
+	<dd><%= @entry.japanischer_quelltext_bearbeitungsstand %></dd>
+      <% end %>
+    </dl>
+  </div>
+<% end %>

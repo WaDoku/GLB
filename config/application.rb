@@ -61,5 +61,7 @@ module DGLB
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    # config.admin_email = 'ulrich.apel@uni-tuebingen.de'.freeze
+
   end
 end
