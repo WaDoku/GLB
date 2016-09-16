@@ -6,30 +6,35 @@ describe 'entry_versions management' do
 
   context 'admin logs in' do
     before do
-      visit new_user_session_path
-      fill_in 'user_email', with: admin.email
-      fill_in 'user_password', with: admin.password
-      click_button('Anmelden')
+      login_as_user(admin)
     end
     context 'edits an entry two times' do
       before do
         visit edit_entry_path(entry)
-        fill_in 'entry_lemma_in_katakana', with: 'edit for the first time'
+        fill_in 'entry_kennzahl', with: '1:2'
         click_button('Bearbeitung speichern')
         visit edit_entry_path(entry)
-        fill_in 'entry_lemma_in_katakana', with: 'edit for the second time'
+        fill_in 'entry_kennzahl', with: '1:3'
         click_button('Bearbeitung speichern')
       end
-      it 'admin visits the version index' do
+      it 'visits version index and sees two versions of entry' do
         visit entry_versions_path(entry)
-        expect(page).to have_content('Versions Index')
-        # proofs that two Versions are displayed
         expect(page).to have_css('h6', count: 2)
       end
-      it 'admin visits a version show template' do
+      it 'visits current version and sees respective changes' do
+        visit entry_versions_path(entry)
+        click_link('Aktuelle Version')
+        expect(page).to have_content('1:3')
+      end
+      it 'visits first version and sees respective changes' do
         visit entry_versions_path(entry)
         click_link('Version: 1')
-        expect(page).to have_content('Kennungsdaten')
+        expect(page).to have_content('1:2')
+      end
+      it 'visits second version and sees respective changes' do
+        visit entry_versions_path(entry)
+        click_link('Version: 2')
+        expect(page).to have_content('1:1')
       end
     end
   end
