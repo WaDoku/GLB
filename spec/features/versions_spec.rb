@@ -1,13 +1,10 @@
 require 'spec_helper'
 
 describe 'versions management' do
+  let(:admin) { FactoryGirl.create(:admin) }
   context 'admin logs in' do
     before do
-      admin = FactoryGirl.create(:admin)
-      visit new_user_session_path
-      fill_in 'user_email', with: admin.email
-      fill_in 'user_password', with: admin.password
-      click_button('Anmelden')
+      login_as_user(admin)
     end
     context 'updates an entry' do
       before do

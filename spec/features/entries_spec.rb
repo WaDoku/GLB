@@ -7,11 +7,7 @@ describe 'entries management' do
   describe 'entries authorization' do
     context 'authenticated user' do
       before do
-        user = FactoryGirl.create(:admin)
-        visit new_user_session_path
-        fill_in 'user_email', with: user.email
-        fill_in 'user_password', with: user.password
-        click_button('Anmelden')
+        login_as_user(admin)
       end
       context 'visits the entries index with a valid entry' do
         before do
@@ -42,11 +38,7 @@ describe 'entries management' do
     end
     context 'unpublished entries' do
       before do
-        user = FactoryGirl.create(:user, role: 'admin')
-        visit new_user_session_path
-        fill_in 'user_email', with: user.email
-        fill_in 'user_password', with: user.password
-        click_button('Anmelden')
+        login_as_user(admin)
         unpublished_entry = FactoryGirl.create(:entry, freigeschaltet: false)
         visit entry_path(unpublished_entry)
       end

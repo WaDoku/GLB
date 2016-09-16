@@ -6,10 +6,7 @@ describe 'comments management' do
     let(:comment) { FactoryGirl.create(:comment) }
     let(:admin) { FactoryGirl.create(:admin) }
     before do
-      visit new_user_session_path
-      fill_in 'user_email', with: admin.email
-      fill_in 'user_password', with: admin.password
-      click_button('Anmelden')
+      login_as_user(admin)
     end
     it 'edits a comment' do
       comment.update(comment: 'previous comment content', entry_id: entry.id)
