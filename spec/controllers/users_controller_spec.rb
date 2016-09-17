@@ -8,14 +8,14 @@ describe UsersController, type: :controller do
   let(:commentator) { FactoryGirl.create(:commentator) }
   let(:user) { FactoryGirl.create(:user) }
 
-  describe 'get index' do
+  describe 'GET index' do
     subject { get :index }
 
     it_behaves_like 'something that admin, editor & author can access'
     it_behaves_like 'something that commentator and guest can not access'
   end
 
-  describe 'get new' do
+  describe 'GET new' do
     context 'as admin' do
       before do
         sign_in admin
@@ -76,7 +76,7 @@ describe UsersController, type: :controller do
     end
   end
 
-  describe 'get edit' do
+  describe 'GET edit' do
     context 'as admin' do
       it 'renders the view' do
         sign_in admin
@@ -91,7 +91,7 @@ describe UsersController, type: :controller do
     end
   end
 
-  describe 'get update' do
+  describe 'PUT update' do
     context 'as admin' do
       before do
         sign_in admin

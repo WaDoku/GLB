@@ -38,7 +38,7 @@ FactoryGirl.define do
 
   factory :entry, class: Entry do
     user_id { FactoryGirl.create(:admin).id }
-    kennzahl '981:1'
+    kennzahl '1:1'
     japanische_umschrift 'chi {muchi}'
     deutsche_uebersetzung 'Torheit, Dummheit {Nicht-Torheit}'
   end
