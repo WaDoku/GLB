@@ -4,10 +4,10 @@
       <li class="nav-header">Scan der Ausgabe von 1987</li>
       <li>
         <% pages = to_scan_pages(@entry.kennzahl) %>
-        <%= link_to "Seite #{pages[0]} anzeigen", "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/SBDJ_Seite_#{pages[0]}.jpg" %>
+        <%= link_to "Seite #{pages[0]} anzeigen", "https://buddhismus-lexikon.eu/SBDJ-Original-JPGs/SBDJ_Seite_#{pages[0]}.jpg" %>
       </li>
       <li>
-        <%= link_to "Seite #{pages[1]} anzeigen", "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/SBDJ_Seite_#{pages[1]}.jpg" %>
+        <%= link_to "Seite #{pages[1]} anzeigen", "https://buddhismus-lexikon.eu/SBDJ-Original-JPGs/SBDJ_Seite_#{pages[1]}.jpg" %>
       </li>
       <li class="nav-header">Frühere Eintragsversionen</li>
       <% if @entry.entry_docs.present? %>
