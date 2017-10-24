@@ -28,7 +28,6 @@
         <%= f.text_area :japanischer_quelltext %>
         <%= f.label :japanischer_quelltext_bearbeitungsstand %>
         <%= f.text_field :japanischer_quelltext_bearbeitungsstand %>
-
       </div>
     </div>
     <div style="margin-left: 950px;"> 
@@ -56,6 +55,8 @@
       </div>
       <div class="funky_grey_seperator">
         <h4>Lemma-Schreibungen und -Aussprachen</h4>
+        <a id="hide_lemma_schreibungen">weniger Felder</a>
+        <a id="show_lemma_schreibungen">mehr Felder</a>
         <%= f.label :japanische_umschrift%>
         <%= f.text_field :japanische_umschrift %>
         <%= f.label :japanische_umschrift_din, 'Japanische Umschrift Din' %>
@@ -64,27 +65,33 @@
         <%= f.text_field :kanji %>
         <%= f.label :chinesisch %>
         <%= f.text_field :chinesisch %>
-        <%= f.label :tibetisch %>
-        <%= f.text_field :tibetisch %>
+        <div class="toggle_lemma_schreibungen_visibility">
+          <%= f.label :tibetisch %>
+          <%= f.text_field :tibetisch %>
+        </div>
         <%= f.label :koreanisch %>
         <%= f.text_field :koreanisch %>
         <%= f.label :pali %>
         <%= f.text_field :pali %>
         <%= f.label :sanskrit %>
         <%= f.text_field :sanskrit %>
-        <%= f.label :weitere_sprachen %>
-        <%= f.text_field :weitere_sprachen %>
-        <%= f.label :alternative_japanische_lesungen %>
-        <%= f.text_field :alternative_japanische_lesungen %>
-        <%= f.label :schreibvarianten %>
-        <%= f.text_field :schreibvarianten %>
-        <%= f.label :lemma_in_katakana, 'Lemma in Katakana' %>
-        <%= f.text_field :lemma_in_katakana %>
-        <%= f.label :lemma_in_lateinbuchstaben, 'Lemma in Lateinbuchstaben' %>
-        <%= f.text_field :lemma_in_lateinbuchstaben %>
+        <div class="toggle_lemma_schreibungen_visibility">
+          <%= f.label :weitere_sprachen %>
+          <%= f.text_field :weitere_sprachen %>
+          <%= f.label :alternative_japanische_lesungen %>
+          <%= f.text_field :alternative_japanische_lesungen %>
+          <%= f.label :schreibvarianten %>
+          <%= f.text_field :schreibvarianten %>
+          <%= f.label :lemma_in_katakana, 'Lemma in Katakana' %>
+          <%= f.text_field :lemma_in_katakana %>
+          <%= f.label :lemma_in_lateinbuchstaben, 'Lemma in Lateinbuchstaben' %>
+          <%= f.text_field :lemma_in_lateinbuchstaben %>
+        </div>
       </div>
       <div class="funky_grey_seperator">
         <h4>Übersetzungen, Quellenangaben, Literatur und Ergänzungen</h4>
+        <a id="hide_uebersetzung">weniger Felder</a>
+        <a id="show_uebersetzung">mehr Felder</a>
         <%= f.label :lemma_art %>
         <%= f.select :lemma_art, ["", "Person", "Tempel", "Werk", "Fachtermini", "Geographische Bezeichnung", "Ereignis"] %> 
         <%= f.label :jahreszahlen %>
@@ -97,12 +104,18 @@
         <%= f.cktext_area :quellen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
         <%= f.label :literatur %>
         <%= f.cktext_area :literatur, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
-        <%= f.label :eigene_ergaenzungen %>
-        <%= f.cktext_area :eigene_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
-        <%= f.label :quellen_ergaenzungen %>
-        <%= f.cktext_area :quellen_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
-        <%= f.label :literatur_ergaenzungen %>
-        <%= f.cktext_area :literatur_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
+        <div class="toggle_uebersetzung_visibility">
+          <%= f.label :eigene_ergaenzungen %>
+          <%= f.cktext_area :eigene_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
+          <%= f.label :quellen_ergaenzungen %>
+          <%= f.cktext_area :quellen_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
+          <%= f.label :literatur_ergaenzungen %>
+          <%= f.cktext_area :literatur_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
+          <%= f.label :japanischer_quelltext %>
+          <%= f.text_field :japanischer_quelltext %>
+          <%= f.label :japanischer_quelltext_bearbeitungsstand %>
+          <%= f.text_field :japanischer_quelltext_bearbeitungsstand %>
+        </div>
       </div>
     </div>
   <% end %>
