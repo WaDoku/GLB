@@ -27,6 +27,20 @@ $(document).ready(function(){
     $(".toggle_uebersetzung_visibility").toggle(200);
   });
 });
+$(function(){
+  $(".btn1").click(function () {
+    $(this).text(function(i, text){
+      return text === "Mehr Felder" ? "Weniger Felder" : "Mehr Felder";
+    })
+  });
+})
+$(function(){
+  $(".btn2").click(function () {
+    $(this).text(function(i, text){
+      return text === "Mehr Felder" ? "Weniger Felder" : "Mehr Felder";
+    })
+  });
+})
 
 var count = 0;
 var pages = ["page0", "page1", "page2", "page3", "page4", "page5", "page6", "page7", "page8"];
