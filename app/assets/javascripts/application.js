@@ -12,18 +12,19 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap
 //= require turbolinks
 //= require ckeditor/init
 //= require_tree .
 $(document).ready(function(){
-  $("#hide_lemma_schreibungen").click(function(){
-    $(".toggle_lemma_schreibungen_visibility").toggle(400);
+  $(".btn1").click(function(){
+    $(".toggle_lemma_schreibungen_visibility").toggle(200);
   });
 });
 
 $(document).ready(function(){
-  $("#hide_uebersetzung").click(function(){
-    $(".toggle_uebersetzung_visibility").toggle(400);
+  $(".btn2").click(function(){
+    $(".toggle_uebersetzung_visibility").toggle(200);
   });
 });
 

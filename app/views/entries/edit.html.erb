@@ -55,7 +55,7 @@
       </div>
       <div class="funky_grey_seperator">
         <h4>Lemma-Schreibungen und -Aussprachen</h4>
-        <a id="hide_lemma_schreibungen">weniger/mehr Felder</a>
+        <button type="button" class="btn1" id="funk">weniger/mehr Felder</button>
         <%= f.label :japanische_umschrift%>
         <%= f.text_field :japanische_umschrift %>
         <%= f.label :japanische_umschrift_din, 'Japanische Umschrift Din' %>
@@ -64,7 +64,7 @@
         <%= f.text_field :kanji %>
         <%= f.label :chinesisch %>
         <%= f.text_field :chinesisch %>
-        <div class="toggle_lemma_schreibungen_visibility">
+        <div class="toggle_lemma_schreibungen_visibility" style="display:none">
           <%= f.label :tibetisch %>
           <%= f.text_field :tibetisch %>
         </div>
@@ -74,7 +74,7 @@
         <%= f.text_field :pali %>
         <%= f.label :sanskrit %>
         <%= f.text_field :sanskrit %>
-        <div class="toggle_lemma_schreibungen_visibility">
+        <div class="toggle_lemma_schreibungen_visibility" style="display:none">
           <%= f.label :weitere_sprachen %>
           <%= f.text_field :weitere_sprachen %>
           <%= f.label :alternative_japanische_lesungen %>
@@ -89,7 +89,7 @@
       </div>
       <div class="funky_grey_seperator">
         <h4>Übersetzungen, Quellenangaben, Literatur und Ergänzungen</h4>
-        <a id="hide_uebersetzung">weniger/mehr Felder</a>
+        <button type="button" class="btn2">weniger/mehr Felder</button>
         <%= f.label :lemma_art %>
         <%= f.select :lemma_art, ["", "Person", "Tempel", "Werk", "Fachtermini", "Geographische Bezeichnung", "Ereignis"] %> 
         <%= f.label :jahreszahlen %>
@@ -102,7 +102,7 @@
         <%= f.cktext_area :quellen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
         <%= f.label :literatur %>
         <%= f.cktext_area :literatur, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
-        <div class="toggle_uebersetzung_visibility">
+        <div class="toggle_uebersetzung_visibility" style="display:none">
           <%= f.label :eigene_ergaenzungen %>
           <%= f.cktext_area :eigene_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
           <%= f.label :quellen_ergaenzungen %>
