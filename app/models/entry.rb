@@ -47,6 +47,15 @@ class Entry < ActiveRecord::Base
     end
   end
 
+  def modify_ck_editor_tags
+    doc = Nokogiri::HTML.fragment(self.uebersetzung)
+    doc.css("span").map do |span|
+      span.name = span.attributes['class'].value # gibt dem span tag den namen des values
+      span.attributes['class'].remove # löscht den value
+    end
+    doc.to_xml
+  end
+
   def cleanup
     substituter = Substituter.new
     if self.japanische_umschrift
@@ -79,10 +88,11 @@ class Entry < ActiveRecord::Base
         quellen_ergaenzungen.blank? &&
         literatur_ergaenzungen.blank?
       errors[:base] = 'Mindestens ein Feld der Gruppe '\
-      "'Uebersetzungen , Quellenangaben, Literatur und Ergaenzungen' "\
-      "muss ausgefüllt sein!"
+        "'Uebersetzungen , Quellenangaben, Literatur und Ergaenzungen' "\
+        "muss ausgefüllt sein!"
     end
   end
+
 
   private
 
@@ -94,4 +104,16 @@ class Entry < ActiveRecord::Base
       end
     end
   end
+
 end
+
+
+
+
+
+
+
+
+
+
+
