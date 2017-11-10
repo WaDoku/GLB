@@ -4,6 +4,10 @@
 
 }
 
+.eigennamen {
+  color: magenta;
+}
+
 .werktitel_original {
   font-style: italic;
 }
@@ -24,4 +28,8 @@
 
 .fragliche_stellen {
   text-decoration: underline;
+}
+.index {
+  color: magenta;
+  text-decoration: overline;
 }
