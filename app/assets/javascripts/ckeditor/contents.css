@@ -29,7 +29,6 @@
 .fragliche_stellen {
   text-decoration: underline;
 }
-.index {
-  color: magenta;
+.indexeintrag {
   text-decoration: overline;
 }

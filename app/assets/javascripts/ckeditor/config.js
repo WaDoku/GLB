@@ -14,7 +14,7 @@ CKEDITOR.editorConfig = function( config )
       ['Sonstiges'],
       ['Eigennamen'],
       ['fragliche Stellen'],
-      ['Index'],
+      ['Indexeintrag'],
       ['Undo'],
       ['Redo']
     ];

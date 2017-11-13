@@ -12,13 +12,12 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 .cke_button__fachtermini_icon{
   display:none;
 }
-.cke_button__index_label{
+.cke_button__indexeintrag_label{
   display:inline-block;
-  color: magenta;
   text-decoration: overline;
   font-size:15px;
 }
-.cke_button__index_icon{
+.cke_button__indexeintrag_icon{
   display:none;
 }
 .original_label{
