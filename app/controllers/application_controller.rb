@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   protect_from_forgery except: :receive_guest
   layout :layout_by_resource
+  before_action :set_paper_trail_whodunnit
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from CanCan::AccessDenied do
