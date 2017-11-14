@@ -1,7 +1,6 @@
 .fachtermini {
   color: blue;
   font-style: italic;
-
 }
 
 .eigennamen {
@@ -29,6 +28,7 @@
 .fragliche_stellen {
   text-decoration: underline;
 }
+
 .indexeintrag {
   text-decoration: overline;
 }
