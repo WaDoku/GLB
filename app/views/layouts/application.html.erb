@@ -70,14 +70,38 @@
     </nav>  
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-2"> 
-          <div class="sidebar">
-            <%= render "shared/sidebar" %>
+        <% if content_for(:show) %>
+          <div class="col-md-2"> 
+            <div class="sidebar">
+              <%= render "shared/sidebar_entry_show" %>
+            </div>
           </div>
-        </div>
-        <div class="col-md-10">
-          <%= yield %>
-        </div>
+          <div class="col-md-10">
+            <%= yield(:show) %>
+          </div>
+        <% elsif content_for(:index)%>
+          <div class="col-md-2"> 
+            <div class="sidebar">
+              <%= render "shared/sidebar_entry_index" %>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <%= yield(:index) %>
+          </div>
+        <% elsif content_for(:user_entries_index)%>
+          <div class="col-md-2"> 
+            <div class="sidebar">
+              <%= render "shared/sidebar_user_entries_index" %>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <%= yield(:user_entries_index) %>
+          </div>
+        <% else %>
+          <div class="col-md-12"> 
+            <%= yield %>
+          </div>
+        <% end %>
       </div>
     </div>
     </div>
