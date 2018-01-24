@@ -7,81 +7,100 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container navbar-container">
-          <%= link_to "GLB", root_path, :class => 'brand' %>
-          <ul class="nav">
-            <% if can?(:index, User) %>
-              <li class="dropdown">
-                <a class='dropdown-toggle' data-toggle='dropdown' href='#'>Mitarbeiter</a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><%= link_to "Alle Mitarbeiter", users_path, :method => :get, :target => "_self" %></li>
-                  <% if can?(:create, User)  %>
-                    <li><%= link_to "Neuer Mitarbeiter", new_user_path, :method => :get, :target => "_self" %></li>
-                  <% end %>
-                </ul>
-              </li>
-            <% end %>
-            <% if can?(:index, Entry) %>
-              <li class="dropdown">
-                <a class='dropdown-toggle' data-toggle='dropdown' href='#'>Einträge</a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><%= link_to "Alle Einträge", entries_path %></li>
-                  <% if can?(:create, Entry) %>
-                    <li><%= link_to "Meine Einträge", user_entries_path(current_user) %></li>
-                    <li><%= link_to "Neuer Eintrag", new_entry_path %></li>
-                  <% end %>
-                  <li><%= link_to "Alle Einträge exportieren (csv)", entries_path(format: :csv), :method => :get %></li>
-                  <li><%= link_to "Alle Einträge exportieren (xml)", entries_path(format: :xml), :method => :get %></li>
-                </ul>
-              </li>
-            <% end %>
-            <li><%= link_to "Basislemmata", hundredlemma_path, :method => :get, :target => "_self" %></li>
-            <% if current_user %>
-              <li><%= link_to "Tutorial", tutorial_path, :method => :get, :target => "_self" %></li>
-            <% end %>
-          </ul>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+        <%= link_to "GLB", root_path, class: 'navbar-brand' %>
+      </div>
 
-          <ul class="nav pull-right">
-            <% unless current_user %>
-              <li><%= link_to "Login", new_user_session_path %></li>
-            <% else %>
-              <li class="dropdown">
-                <a class='dropdown-toggle' data-toggle='dropdown' href='#'><%= current_user.name %></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><%= link_to "Profil Bearbeiten", edit_profile_path %></li>
-                  <% if can?(:create, Entry) %>
-                    <li><%= link_to "Meine Einträge", user_entries_path(current_user) %></li>
-                  <% end %>
-                  <li><%= link_to "Abmelden", destroy_user_session_path, :method => :delete %></li>
-                </ul>
-              </li>
-            <% end%>
-          </ul>
-        </div>
-      </div>
-    </div>  
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <% if can?(:index, User) %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mitarbeiter <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Alle Mitarbeiter", users_path %></li>
+                <% if can?(:create, User)  %>
+                  <li><%= link_to "Neuer Mitarbeiter", new_user_path %></li>
+                <% end %> 
+              </ul>
+            </li>
+          <% end %> 
+          <% if can?(:index, Entry) %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Einträge <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><%= link_to "Alle Einträge", entries_path %></li>
+                <% if can?(:create, Entry) %>
+                  <li><%= link_to "Meine Einträge", user_entries_path(current_user) %></li>
+                  <li><%= link_to "Neuer Eintrag", new_entry_path %></li>
+                <% end %>
+                <li><%= link_to "Alle Einträge exportieren (csv)", entries_path(format: :csv), :method => :get %></li>
+                <li><%= link_to "Alle Einträge exportieren (xml)", entries_path(format: :xml), :method => :get %></li>
+                <li><%= link_to "Alle Einträge exportieren (customized_xml)", entries_path(format: :text), :method => :get %></li>
+              </ul>
+            </li>
+            <li><%= link_to 'Basislemmata', hundredlemma_path %></li>
+            <li><%= link_to 'Tutorial', tutorial_path %></li>
+            </li>
+          <% end %> 
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <% unless current_user %>
+            <li><%= link_to "Login", new_user_session_path %></li>
+          <% else %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= current_user.name %><span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Profil Bearbeiten", edit_profile_path %></li>
+                <% if can?(:create, Entry) %>
+                  <li><%= link_to "Meine Einträge", user_entries_path(current_user) %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+                <li><%= link_to "Abmelden", destroy_user_session_path, :method => :delete %></li>
+              </ul>
+            </li>
+          <% end%>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>  
     <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span2 sidebar-nav-fixed">
-          <%= yield :sidebar%>
+      <% if flash[:notice] %>
+        <div class="alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <%= raw(flash[:notice]) %>
         </div>
-        <div class="span9 offset2">
-          <% if flash[:notice] %>
-            <div class="alert alert-notice">
-              <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <strong><%= raw(flash[:notice]) %></strong>
+      <% end %>
+      <div class="row">
+        <% if content_for(:index)%>
+          <div class="col-md-2"> 
+            <div class="sidebar">
+              <%= render "shared/sidebar_entry_index" %>
             </div>
-          <% end %>
-          <%= yield :content%>
-        </div>
-        <div>
-          <div style="width: 100%; overflow: hidden; margin-top: 100px;">
-            <%= yield :content_2 %>
           </div>
-        </div>
+          <div class="col-md-10">
+            <%= yield(:index) %>
+          </div>
+        <% elsif content_for(:user_entries_index)%>
+          <div class="col-md-2"> 
+            <div class="sidebar">
+              <%= render "shared/sidebar_user_entries_index" %>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <%= yield(:user_entries_index) %>
+          </div>
+        <% else %>
+          <div class="col-md-12"> 
+            <%= yield %>
+          </div>
+        <% end %>
       </div>
+    </div>
     </div>
   </body>
 </html>

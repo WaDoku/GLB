@@ -1,3 +1,5 @@
+require 'simplecov'
+SimpleCov.start 'rails'
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
@@ -10,6 +12,7 @@ require "spec_helper_methods"
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
   config.fail_fast = true
   Dir[Rails.root.join("spec/controllers/shared_examples/**/*.rb")].each {|f| require f}
   # ## Mock Framework
@@ -38,24 +41,19 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
-  
+
   config.include(MailerMacros)
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-    reset_email
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
   config.include Capybara::DSL
   #devise
-  config.include Devise::TestHelpers, :type => :controller
-  config.include Devise::TestHelpers, :type => :view
-  config.include Devise::TestHelpers, :type => :helper
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, :type => :view
+  config.include Devise::Test::ControllerHelpers, :type => :helper
   config.include Rails.application.routes.url_helpers
+end
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :active_model
+    with.library :active_record
+  end
 end

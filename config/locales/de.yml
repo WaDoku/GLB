@@ -1,4 +1,8 @@
 de:
+  date:
+    order: 
+      - :month
+      - :year
   activerecord:
     attributes:
       entry:
@@ -15,6 +19,12 @@ de:
         eigene_ergaenzungen: "Eigene Ergänzungen"
         literatur: "Literatur SBDJ"
         literatur_ergaenzungen: "Literatur Ergänzungen"
+
+    attributes:
+      task:
+        recipient_id: "Wem?"
+        to_date: "Bearbeitungszeit (Monate)"
+        entry_id: "Welcher Eintrag?"
 
     errors:
       models:
@@ -41,5 +51,9 @@ de:
         comment:
           attributes:
             comment:
-              blank: "Kommentar daft nicht leer sein!"
+              blank: "Kommentar darf nicht leer sein!"
+        assignment:
+          attributes:
+            entry_id:
+              taken: "Der Eintrag ist bereits einem anderem User Zugewiesen"
 

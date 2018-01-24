@@ -12,9 +12,34 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//= require bootstrap-sprockets
 //= require ckeditor/init
 //= require_tree .
+$(document).ready(function(){
+  $(".btn1").click(function(){
+    $(".toggle_lemma_schreibungen_visibility").toggle(200);
+  });
+});
+
+$(document).ready(function(){
+  $(".btn2").click(function(){
+    $(".toggle_uebersetzung_visibility").toggle(200);
+  });
+});
+$(function(){
+  $(".btn1").click(function () {
+    $(this).text(function(i, text){
+      return text === "Weitere Felder" ? "Weniger Felder" : "Weitere Felder";
+    })
+  });
+})
+$(function(){
+  $(".btn2").click(function () {
+    $(this).text(function(i, text){
+      return text === "Weitere Felder" ? "Weniger Felder" : "Weitere Felder";
+    })
+  });
+})
 
 var count = 0;
 var pages = ["page0", "page1", "page2", "page3", "page4", "page5", "page6", "page7", "page8"];
@@ -31,7 +56,7 @@ $(document).on("page:load", function() {
 function set_page_number() {
   count = 0;
   var default_page_number = document.getElementById("kennzahl").dataset.kennzahl;
-  document.getElementById("page_count").innerHTML = 'Seite ' + default_page_number + ', oben';
+  document.getElementById("page_count").innerHTML = ' ' + default_page_number + ', oben';
 }
 
 function back_first_switch() {
@@ -63,13 +88,13 @@ function write_page_count() {
   var page_number_as_integer = Math.floor(page_number_as_string);       
   if (count > 2) {
     console.log('else 1')
-      page_number_as_integer += 1;
+    page_number_as_integer += 1;
   }
   if (count > 5) {
     console.log('else 2')
-      page_number_as_integer += 1;
+    page_number_as_integer += 1;
   } 
-  document.getElementById("page_count").innerHTML = 'Seite ' + page_number_as_integer.toString() + ", " + page_titles[count];
+  document.getElementById("page_count").innerHTML = ' ' + page_number_as_integer.toString() + ", " + page_titles[count];
 
 
   for (var i = 0; i < 9; i++) {

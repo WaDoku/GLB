@@ -2,7 +2,9 @@ CKEDITOR.editorConfig = function( config )
 {
   config.toolbar = 'MyToolbar';
   config.extraPlugins = 'markups';
+  config.skin = 'moono';
   config.forcePasteAsPlainText = true;
+  config.width = 551;
 
   config.toolbar_MyToolbar =
     [
@@ -13,6 +15,7 @@ CKEDITOR.editorConfig = function( config )
       ['Sonstiges'],
       ['Eigennamen'],
       ['fragliche Stellen'],
+      ['Indexeintrag'],
       ['Undo'],
       ['Redo']
     ];
