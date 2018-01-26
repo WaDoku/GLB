@@ -120,7 +120,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.label_bearbeitungsstand
-    unlabeled_entries = Entry.select { |e| e.bearbeitungsstand.blank? }
+    unlabeled_entries = Entry.where(bearbeitungsstand: [nil, ''])
     unlabeled_entries.each do |e|
       e.update(bearbeitungsstand: 'unformatiert') if e.unformatted?
       e.update(bearbeitungsstand: 'formatiert') if e.formatted?
