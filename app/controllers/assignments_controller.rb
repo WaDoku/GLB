@@ -1,6 +1,5 @@
 class AssignmentsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_assignment, only: %i[edit update destroy]
 
   def new
     @assignment = Assignment.new(creator_id: current_user.id, entry_id: params['entry_id'])
@@ -12,7 +11,7 @@ class AssignmentsController < ApplicationController
   def create
     @assignment = Assignment.new(assignment_params.merge({to_date: calc_expiry_date}))
     if @assignment.save
-      redirect_to user_entries_path(@assignment.recipient_id), notice: 'Assignment was successfully created.'
+      redirect_to user_entries_path(@assignment.recipient_id), notice: 'Die Zuweisung wurde erfolgreich erstellt.'
       AssignmentNotifier.create(@assignment).deliver_now
     else
       render :new
@@ -21,7 +20,7 @@ class AssignmentsController < ApplicationController
 
   def update
     if @assignment.update(assignment_params.merge({to_date: calc_expiry_date}))
-      redirect_to user_entries_path(@assignment.recipient_id), notice: 'Task was successfully updated.'
+      redirect_to user_entries_path(@assignment.recipient_id), notice: 'Die Zuweisung wurde erfolgreich bearbeitet.'
       AssignmentNotifier.create(@assignment).deliver_now
     else
       render :edit
@@ -33,15 +32,12 @@ class AssignmentsController < ApplicationController
     if @assignment.destroy
       redirect_to user_entries_path(assignment_recipient), notice: 'Der Eintrag wurde mit erledigt markiert.'
       AssignmentNotifier.done(@assignment).deliver_now
+    else
+      redirect_to user_entries_path(assignment_recipient), notice: 'Die Zuweisung konnte nicht gelöscht werden.'
     end
   end
 
   private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_assignment
-    @assignment = Assignment.find(params[:id])
-  end
 
   # Only allow a trusted parameter "white list" through.
   def assignment_params

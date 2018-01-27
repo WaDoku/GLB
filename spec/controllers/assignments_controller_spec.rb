@@ -39,7 +39,7 @@ RSpec.describe AssignmentsController, type: :controller do
 
         it 'shows a notification' do
           post :create, assignment: attributes_for(:assignment)
-          expect(flash[:notice]).to eq('Assignment was successfully created.')
+          expect(flash[:notice]).to eq('Die Zuweisung wurde erfolgreich erstellt.')
         end
 
         it 'sends an info-mail to assigned user' do
