@@ -17,8 +17,17 @@ describe 'rake db:reminder_assignment', type: :task do
     it 'sends an email notification to recipient of assignment' do
       assignment.save
       Timecop.freeze(Date.today + 2.month + 2.days) do
-        task.execute
         expect { task.execute }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      end
+    end
+    it 'sends an email notification only once' do
+      assignment.save
+      Timecop.freeze(Date.today + 2.month + 2.days) do
+        expect { task.execute }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      end
+      Timecop.freeze(Date.today + 2.month + 3.days) do
+        task.execute
+        expect { task.execute }.to change(ActionMailer::Base.deliveries, :count).by(0)
       end
     end
   end

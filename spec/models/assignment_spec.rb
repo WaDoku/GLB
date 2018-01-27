@@ -50,6 +50,12 @@ RSpec.describe Assignment, type: :model do
         expect(assignment.remindable?).to eq(true)
       end
     end
+    it 'sets assignment.reminded to true after method-call' do
+      Timecop.freeze(Date.today + 2. month + 2.days) do
+        assignment.remindable?
+        expect(assignment.reminded).to eq(true)
+      end
+    end
     it 'returns false if assignment is not remindable' do
       expect(assignment.remindable?).to eq(false)
     end

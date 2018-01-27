@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171208114843) do
+ActiveRecord::Schema.define(version: 20180127180645) do
 
   create_table "assignments", force: :cascade do |t|
     t.integer  "creator_id"
@@ -19,8 +19,9 @@ ActiveRecord::Schema.define(version: 20171208114843) do
     t.date     "from_date"
     t.date     "to_date"
     t.integer  "entry_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "reminded",     default: false
   end
 
   create_table "ckeditor_assets", force: :cascade do |t|
