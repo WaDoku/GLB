@@ -7,7 +7,7 @@
         <%= f.select(:recipient_id, options_for_select(User.all.collect {|user| [ user.name, user.id ] }, { selected: [User.default_admin.name, User.default_admin.id]}), label: 'Editor') %>
         <%= f.hidden_field :creator_id, value: @assignment.creator_id %>
         <%= f.hidden_field :from_date, value: Date.today %>
-        <%= f.select(:to_date, options_for_select((1..6), { selected: 3 }), label: 'Bearbeitungszeitraum') %>
+        <%= f.select(:to_date, options_for_select((1..6), { selected: 3 }), label: 'Bearbeitungszeitraum (Monate)') %>
         <%= f.submit %>
       <% end %>
       </div>
