@@ -39,6 +39,7 @@ class Entry < ActiveRecord::Base
   ].freeze
 
   belongs_to :user
+  delegate :name, to: :user, allow_nil: true, prefix: :user
   has_many :comments
   has_many :entry_docs
   has_many :entry_htmls
