@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Assignment, type: :model do
-  let!(:assignment) { create(:assignment) }
-  let!(:entry) { create(:entry) }
+  let(:assignment) { create(:assignment) }
+  let(:entry) { create(:entry) }
 
   describe 'general' do
     it 'has a valid factory' do
@@ -11,6 +11,10 @@ RSpec.describe Assignment, type: :model do
   end
 
   describe 'validations' do
+    before do
+      entry
+      assignment
+    end
     it { should validate_presence_of(:creator_id) }
     it { should validate_presence_of(:recipient_id) }
     it { should validate_presence_of(:from_date) }

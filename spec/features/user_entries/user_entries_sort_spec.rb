@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe 'sort user entries' do
   let(:admin) { create(:admin) }
-  let!(:formatted_entry) { build(:formatted_entry) }
-  let!(:admins_formatted_entry) { build(:formatted_entry, user_id: admin.id, japanische_umschrift: 'admins_formatted_entry') }
-  let!(:unformatted_entry) { build(:unformatted_entry) }
-  let!(:admins_unformatted_entry) { build(:unformatted_entry, user_id: admin.id, japanische_umschrift: 'admins_unformatted_entry') }
-  let!(:unprocessed_entry) { build(:unprocessed_entry) }
-  let!(:admins_unprocessed_entry) { build(:unprocessed_entry, user_id: admin.id, japanische_umschrift: 'admins_unprocessed_entry') }
-  let!(:deprecated_syntax_entry) { build(:deprecated_syntax_entry) }
-  let!(:admins_deprecated_syntax_entry) { build(:deprecated_syntax_entry, user_id: admin.id, japanische_umschrift: 'admins_deprecated_syntax_entry') }
+  let(:formatted_entry) { build(:formatted_entry) }
+  let(:admins_formatted_entry) { build(:formatted_entry, user_id: admin.id, japanische_umschrift: 'admins_formatted_entry') }
+  let(:unformatted_entry) { build(:unformatted_entry) }
+  let(:admins_unformatted_entry) { build(:unformatted_entry, user_id: admin.id, japanische_umschrift: 'admins_unformatted_entry') }
+  let(:unprocessed_entry) { build(:unprocessed_entry) }
+  let(:admins_unprocessed_entry) { build(:unprocessed_entry, user_id: admin.id, japanische_umschrift: 'admins_unprocessed_entry') }
+  let(:deprecated_syntax_entry) { build(:deprecated_syntax_entry) }
+  let(:admins_deprecated_syntax_entry) { build(:deprecated_syntax_entry, user_id: admin.id, japanische_umschrift: 'admins_deprecated_syntax_entry') }
 
   def create_set_of_entries_of_all_formats
     formatted_entry.save

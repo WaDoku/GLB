@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe User, type: :model do
-  let!(:user) { create(:user) }
-  let!(:super_admin) { create(:user, email: 'ulrich.apel@uni-tuebingen.de') }
+  let(:user) { create(:user) }
+  let(:super_admin) { create(:user, email: 'ulrich.apel@uni-tuebingen.de') }
 
   describe 'general' do
     it 'creates a new instance of a user given valid attributes' do
@@ -24,7 +24,7 @@ RSpec.describe User, type: :model do
       expect(user.persisted?).to eq(false)
     end
     it 'does not delete a user that holds entries' do
-      user.entries << FactoryBot.create(:entry)
+      user.entries << create(:entry)
       expect { user.destroy }.to raise_error('User still holds entries')
     end
   end
