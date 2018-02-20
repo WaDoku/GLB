@@ -13,7 +13,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def remindable?
-    days_expired_since_assignment > two_third_of_processing_time
+    if days_expired_since_assignment > two_third_of_processing_time && reminded == false
+      update(reminded: true)
+    else
+      false
+    end
   end
 
   def two_third_of_processing_time

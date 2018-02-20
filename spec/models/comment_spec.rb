@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Comment, type: :model do
-  let!(:comment) { create(:comment) }
+  let(:comment) { create(:comment) }
 
   describe 'general' do
     it 'creates a new instance of a comment given valid attributes' do

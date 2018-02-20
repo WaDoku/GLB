@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Assignment, type: :model do
-  let!(:entry) { create(:entry) }
-  let!(:assignment) { create(:assignment) }
+  let(:entry) { create(:entry) }
+  let(:assignment) { create(:assignment) }
 
   describe 'general' do
     it 'creates a new instance of an entry given valid attributes' do

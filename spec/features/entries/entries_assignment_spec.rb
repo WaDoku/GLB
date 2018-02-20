@@ -24,14 +24,14 @@ describe 'assignments' do
           visit edit_entry_path(entry)
         end
         it 'sees Notification' do
-          expect(page).to have_content("In Bearbeitung von #{entry.user.name} zum #{entry.assignment.to_date}")
+          expect(page).to have_content("In Bearbeitung von #{entry.user_name} zum #{entry.assignment.to_date}")
         end
         it 'sees link Zuweisen Editieren' do
           expect(page).to have_link('Zuweisung Bearbeiten')
         end
         it 'Notification disapears when user visits next template' do
           visit root_path
-          expect(page).not_to have_content("In Bearbeitung von #{entry.user.name} zum #{entry.assignment.to_date}")
+          expect(page).not_to have_content("In Bearbeitung von #{entry.user_name} zum #{entry.assignment.to_date}")
         end
       end
     end

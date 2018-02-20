@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'sort index' do
   let(:admin) { create(:admin) }
-  let!(:formatted_entry) { build(:entry, bearbeitungsstand: 'formatiert') }
-  let!(:unformatted_entry) { build(:entry, bearbeitungsstand: 'unformatiert') }
-  let!(:unprocessed_entry) { build(:entry, bearbeitungsstand: 'unbearbeitet') }
-  let!(:deprecated_syntax_entry) { build(:entry, bearbeitungsstand: 'Code veraltet') }
+  let(:formatted_entry) { build(:entry, bearbeitungsstand: 'formatiert') }
+  let(:unformatted_entry) { build(:entry, bearbeitungsstand: 'unformatiert') }
+  let(:unprocessed_entry) { build(:entry, bearbeitungsstand: 'unbearbeitet') }
+  let(:deprecated_syntax_entry) { build(:entry, bearbeitungsstand: 'Code veraltet') }
 
   before do
     login_as_user(admin)

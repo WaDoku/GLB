@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe Label do
-  let!(:entry) { FactoryBot.create(:entry) }
-  let!(:formatted_entry) { FactoryBot.create(:formatted_entry) }
-  let!(:unformatted_entry) { FactoryBot.create(:unformatted_entry) }
-  let!(:unprocessed_entry) { FactoryBot.create(:unprocessed_entry) }
-  let!(:deprecated_syntax_entry) { FactoryBot.create(:deprecated_syntax_entry) }
+  let(:entry) { FactoryBot.create(:entry) }
+  let(:formatted_entry) { FactoryBot.create(:formatted_entry) }
+  let(:unformatted_entry) { FactoryBot.create(:unformatted_entry) }
+  let(:unprocessed_entry) { FactoryBot.create(:unprocessed_entry) }
+  let(:deprecated_syntax_entry) { FactoryBot.create(:deprecated_syntax_entry) }
 
   describe 'deprecated_syntax_entry' do
     context 'detects chars listed in blacklist' do

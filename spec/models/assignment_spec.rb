@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Assignment, type: :model do
-  let!(:assignment) { create(:assignment) }
-  let!(:entry) { create(:entry) }
+  let(:assignment) { create(:assignment) }
+  let(:entry) { create(:entry) }
 
   describe 'general' do
     it 'has a valid factory' do
@@ -11,6 +11,10 @@ RSpec.describe Assignment, type: :model do
   end
 
   describe 'validations' do
+    before do
+      entry
+      assignment
+    end
     it { should validate_presence_of(:creator_id) }
     it { should validate_presence_of(:recipient_id) }
     it { should validate_presence_of(:from_date) }
@@ -48,6 +52,12 @@ RSpec.describe Assignment, type: :model do
       assignment.update(to_date: Date.today + 1.month)
       Timecop.freeze(Date.today + 22.days) do
         expect(assignment.remindable?).to eq(true)
+      end
+    end
+    it 'sets assignment.reminded to true after method-call' do
+      Timecop.freeze(Date.today + 2. month + 2.days) do
+        assignment.remindable?
+        expect(assignment.reminded).to eq(true)
       end
     end
     it 'returns false if assignment is not remindable' do

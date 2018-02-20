@@ -39,6 +39,7 @@ class Entry < ActiveRecord::Base
   ].freeze
 
   belongs_to :user
+  delegate :name, to: :user, allow_nil: true, prefix: :user
   has_many :comments
   has_many :entry_docs
   has_many :entry_htmls
@@ -120,7 +121,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.label_bearbeitungsstand
-    unlabeled_entries = Entry.select { |e| e.bearbeitungsstand.blank? }
+    unlabeled_entries = Entry.where(bearbeitungsstand: [nil, ''])
     unlabeled_entries.each do |e|
       e.update(bearbeitungsstand: 'unformatiert') if e.unformatted?
       e.update(bearbeitungsstand: 'formatiert') if e.formatted?
