@@ -15,12 +15,9 @@ gem 'bcrypt'
 gem 'cancancan'
 gem 'bootstrap_form'
 gem 'whenever', require: false
-
-group :assets do
-  gem 'sass-rails', '~> 5.0'
-  gem 'bootstrap-sass', '~> 3.3.7'
-  gem 'uglifier', '>= 1.3.0'
-end
+gem 'sass-rails', '~> 5.0'
+gem 'bootstrap-sass', '~> 3.3.7'
+gem 'uglifier', '>= 1.3.0'
 
 group :development, :test do
   gem 'pry-byebug'
