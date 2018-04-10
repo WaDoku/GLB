@@ -2,6 +2,7 @@
 require "bundler/capistrano"
 require "capistrano/ext/multistage"
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
+set :rvm_ruby_version, '2.2.7'
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
 
 set :application, "DGLB"
