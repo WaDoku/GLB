@@ -2,9 +2,9 @@
 require "bundler/capistrano"
 require "capistrano/ext/multistage"
 require "rvm/capistrano"                  # Load RVM's capistrano plugin.
-set :rvm_ruby_version, '2.2.7'
-set :rvm_type, :system  # Copy the exact line. I really mean :system here
 
+set :rvm_ruby_string, :local
+set :rvm_type, :system  # Copy the exact line. I really mean :system here
 set :application, "DGLB"
 set :repository,  "https://github.com/WaDoku/GLB.git"
 
@@ -33,6 +33,7 @@ set :keep_releases, 2
 # these http://github.com/rails/irs_process_scripts
 
 # If you are using Passenger mod_rails uncomment this:
+
 namespace :deploy do
   task :start do ; end
   task :stop do ; end
