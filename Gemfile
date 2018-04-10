@@ -43,3 +43,6 @@ group :test do
   gem 'launchy'
   gem 'database_cleaner'
 end
+
+# Added at 2018-04-10 13:49:55 +0200 by toni:
+gem "rake", "~> 12.3"

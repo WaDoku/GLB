@@ -310,6 +310,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   rails (= 4.2.4)
+  rake (~> 12.3)
   rspec-rails
   rvm-capistrano
   sass-rails (~> 5.0)
