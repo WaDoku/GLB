@@ -1,7 +1,7 @@
 <%= content_tag :div, id: 'kennzahl', data: {kennzahl: @entry.kennzahl.to_i } do %>
 <% end %>
 <% pages = to_scan_pages(@entry.kennzahl) %>
-<div style="width: 800px; position: fixed; margin-top: 22px;">
+<div style="width: 800px; position: fixed">
   <% unless @entry.freigeschaltet %>
     <div class="funky_grey_seperator">
       <div style="float: left;">
@@ -45,7 +45,7 @@
 </div>
     <% end %>
     </div>
-    <div style="margin-left: 820px; width: 575px; margin-top: 21px;"> 
+    <div style="margin-left: 820px; width: 750px">
       <div class="funky_grey_seperator">
         <h4>Kennungsdaten</h4>
         <dl>
