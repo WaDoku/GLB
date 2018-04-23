@@ -1,7 +1,7 @@
 <%= content_tag :div, id: 'kennzahl', data: {kennzahl: @version.kennzahl.to_i } do %>
 <% end %>
 <% pages = to_scan_pages(@version.kennzahl) %>
-<div style="width: 800px; position: fixed; margin-top: 22px;">
+<div style="width: 800px; position: fixed">
   <h1>Version: <%= version_number %> <span style="font-size: 0.5em">Editiert am: <%= created_at.strftime('%b %d, %Y')%>
     <% if version_author %>
     | Editor: <%= version_author %></span></h1>
@@ -43,7 +43,7 @@
 </div>
 <% end %>
 </div>
-<div style="margin-left: 820px; width: 575px; margin-top: 21px;"> 
+<div style="margin-left: 820px; width: 750px; margin-top: 60px;">
   <div class="funky_grey_seperator">
     <h4>Kennungsdaten</h4>
     <dl>
