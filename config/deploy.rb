@@ -93,6 +93,9 @@ namespace :rake do
   task :assets do
     run "cd #{current_path} && bundle exec rake assets:precompile #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
   end
+  task :label do
+    run "cd #{current_path} && bundle exec rake db:label_bearbeitungsstand #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
+  end
 end
 
 after "deploy:update_code", "db_setup:link_shared"
