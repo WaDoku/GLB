@@ -26,10 +26,10 @@
                 <li><%= link_to "Alle Mitarbeiter", users_path %></li>
                 <% if can?(:create, User)  %>
                   <li><%= link_to "Neuer Mitarbeiter", new_user_path %></li>
-                <% end %> 
+                <% end %>
               </ul>
             </li>
-          <% end %> 
+          <% end %>
           <% if can?(:index, Entry) %>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Einträge <span class="caret"></span></a>
@@ -47,7 +47,7 @@
             <li><%= link_to 'Basislemmata', hundredlemma_path %></li>
             <li><%= link_to 'Tutorial', tutorial_path %></li>
             </li>
-          <% end %> 
+          <% end %>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <% unless current_user %>
@@ -67,40 +67,35 @@
           <% end%>
         </ul>
       </div><!-- /.navbar-collapse -->
-    </nav>  
+    </nav>
     <div class="container-fluid">
-      <% if flash[:notice] %>
-        <div class="alert alert-success alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <%= raw(flash[:notice]) %>
-        </div>
-      <% end %>
+    <% if flash[:notice] %>
+      <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <%= raw(flash[:notice]) %>
+      </div>
+    <% end %>
       <div class="row">
         <% if content_for(:index)%>
-          <div class="col-md-2"> 
-            <div class="sidebar">
-              <%= render "shared/sidebar_entry_index" %>
-            </div>
+          <div class="col-xs-2">
+            <%= render "shared/sidebar_entry_index" %>
           </div>
-          <div class="col-md-10">
+          <div class="col-xs-10">
             <%= yield(:index) %>
           </div>
         <% elsif content_for(:user_entries_index)%>
-          <div class="col-md-2"> 
-            <div class="sidebar">
-              <%= render "shared/sidebar_user_entries_index" %>
-            </div>
+          <div class="col-xs-2">
+            <%= render "shared/sidebar_user_entries_index" %>
           </div>
-          <div class="col-md-10">
+          <div class="col-xs-10">
             <%= yield(:user_entries_index) %>
           </div>
         <% else %>
-          <div class="col-md-12"> 
+          <div class="col-md-12">
             <%= yield %>
           </div>
         <% end %>
       </div>
-    </div>
     </div>
   </body>
 </html>

@@ -5,5 +5,5 @@
       <%= link_to "#{@entry.comments.count} Kommentare", {anchor: 'C4'}, {class: 'btn btn-default'} %>
     </div>
   </div>
-  <%= f.text_area :comment, label: 'Kommentar' %>
+  <%= f.text_area :comment, label: 'Kommentar', rows: 4 %>
 <% end %>
