@@ -168,8 +168,8 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     orm_adapter (0.5.0)
-    paper_trail (9.0.1)
-      activerecord (>= 4.2, < 5.3)
+    paper_trail (8.1.2)
+      activerecord (>= 4.2, < 5.2)
       request_store (~> 1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -180,7 +180,7 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (3.0.2)
-    rack (1.6.9)
+    rack (1.6.10)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.10)
@@ -308,7 +308,7 @@ DEPENDENCIES
   kaminari
   launchy
   nokogiri
-  paper_trail
+  paper_trail (= 8.1.2)
   pry-byebug
   pry-rails
   rails (= 4.2.10)

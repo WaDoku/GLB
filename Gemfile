@@ -8,8 +8,8 @@ gem 'nokogiri'
 
 gem 'devise'
 gem 'devise-i18n-views'
-gem "paper_trail"
-gem "kaminari"
+gem 'paper_trail', '8.1.2'
+gem 'kaminari'
 gem 'bootstrap-kaminari-views'
 gem 'bcrypt'
 gem 'cancancan'
