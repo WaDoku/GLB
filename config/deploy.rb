@@ -49,21 +49,21 @@ end
 
 namespace :db_setup do
   task :create_shared, :roles => :app do
-    run "mkdir -p #{deploy_to}/#{shared_dir}/db/"
-    run "chmod 1777 #{deploy_to}/#{shared_dir}/db/"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/pdf/"
-    run "chmod 1777 #{deploy_to}/#{shared_dir}/pdf/"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/index/"
-    run "chmod -R 1777 #{deploy_to}/#{shared_dir}/index/"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/SBDJ-Original-JPGs/"
-    run "chmod -R 1777 #{deploy_to}/#{shared_dir}/SBDJ-Original-JPGs/"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/docs/"
-    run "chmod -R 1777 #{deploy_to}/#{shared_dir}/docs/"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/htms/"
-    run "chmod -R 1777 #{deploy_to}/#{shared_dir}/htms/"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/"
-    run "chmod -R 1777 #{deploy_to}/#{shared_dir}/assets/"
-    run "touch #{deploy_to}/#{shared_dir}/assets/.sprockets-manifest.json"
+    run "mkdir -p #{shared_path}/db/"
+    run "chmod 1777 #{shared_path}/db/"
+    run "mkdir -p #{shared_path}/pdf/"
+    run "chmod 1777 #{shared_path}/pdf/"
+    run "mkdir -p #{shared_path}/index/"
+    run "chmod -R 1777 #{shared_path}/index/"
+    run "mkdir -p #{shared_path}/SBDJ-Original-JPGs/"
+    run "chmod -R 1777 #{shared_path}/SBDJ-Original-JPGs/"
+    run "mkdir -p #{shared_path}/docs/"
+    run "chmod -R 1777 #{shared_path}/docs/"
+    run "mkdir -p #{shared_path}/htms/"
+    run "chmod -R 1777 #{shared_path}/htms/"
+    run "mkdir -p ##{shared_path}/assets/"
+    run "chmod -R 1777 #{shared_path}/assets/"
+    run "touch #{shared_path}/assets/.sprockets-manifest.json"
   end
 
   task :link_shared do
@@ -95,6 +95,9 @@ namespace :rake do
   end
   task :label do
     run "cd #{current_path} && bundle exec rake db:label_bearbeitungsstand #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
+  end
+  task :secret do
+    run "cd #{current_path} && bundle exec rake secret #{ENV['task']}RAILS_ENV=#{rails_env} --trace"
   end
 end
 
