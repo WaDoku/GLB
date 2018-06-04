@@ -1,4 +1,7 @@
-require 'pry-byebug'
+if ENV['RAILS_ENV'] == 'development'
+  require 'pry-byebug'
+end
+
 module EntriesHelper
   def embed_scans(kennzahl)
     [
