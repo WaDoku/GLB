@@ -1,27 +1,24 @@
 class EntriesController < ApplicationController
+  include Export
   load_and_authorize_resource
   before_action :build_entry_comment, only: :show
-  helper_method :sort_column, :sort_direction
 
   def index
-    if params[:search]
-      @entries = Entry.search(params[:search]).page(params[:page])
-      @count = Entry.search(params[:search]).count # refactoring needed
-    else
-      @entries = Entry.order(sort_column + " " + sort_direction).page(params[:page])
-      @count = Entry.order(sort_column + " " + sort_direction).count # refactoring needed
-    end
+    @count = (params[:search] ? search_entries : sort_entries).count
+    @entries = params[:search] ? paginate_entries(search_entries) : paginate_entries(sort_entries)
+
     respond_to do |format|
-      format.html # index.html.erb
-      format.csv {send_data @entries.to_csv, :type => 'text/csv', :disposition => "attachment; filename=glb.csv"}
-      format.xml {send_data @entries.to_xml, :type => 'text/xml', :disposition => "attachment; filename=glb.xml"}
-      format.json { render json: @entries }
+      format.html
+      format.json { render json: all_entries }
+      format.xml  { send_data all_entries.to_xml, type: 'text/xml', disposition: 'attachment; filename=glb.xml' }
+      format.text { send_data customized_xml(all_entries), type: 'text/xml', disposition: 'attachment; filename=customized_glb.xml' }
+      format.csv  { send_data customized_csv(all_entries), type: 'text/csv', disposition: 'attachment; filename=glb.csv' }
     end
   end
 
   def show
     respond_to do |format|
-      format.html 
+      format.html
       format.json { render json: @entry }
     end
   end
@@ -31,6 +28,7 @@ class EntriesController < ApplicationController
   end
 
   def edit
+    flash.now[:notice] = "In Bearbeitung von #{@entry.user_name} zum #{@entry.assignment.to_date}" if @entry.assignment
   end
 
   def create
@@ -40,7 +38,7 @@ class EntriesController < ApplicationController
         format.html { redirect_to @entry, notice: 'Eintrag erfolgreich erstellt.' }
         format.json { render json: @entry, status: :created, location: @entry }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @entry.errors, status: :unprocessable_entity }
       end
     end
@@ -52,7 +50,7 @@ class EntriesController < ApplicationController
         format.html { redirect_to @entry, notice: "Eintrag erfolgreich editiert. #{undo_link}" }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @entry.errors, status: :unprocessable_entity }
       end
     end
@@ -68,6 +66,11 @@ class EntriesController < ApplicationController
 
   private
 
+  def paginate_entries(entries)
+    Kaminari.paginate_array(entries).page(params[:page])
+  end
+
+
   def build_entry_comment
     if current_user
       @comment = Comment.new
@@ -76,8 +79,8 @@ class EntriesController < ApplicationController
     end
   end
 
-  def page
-    params[:page] || 1
+  def all_entries
+    @all_entries ||= Entry.all
   end
 
   def entry_params
@@ -85,17 +88,22 @@ class EntriesController < ApplicationController
   end
 
   def undo_link
-    view_context.link_to("Rückgängig", revert_version_path(@entry.versions.reload.last), :method => :post)
+    view_context.link_to('Rückgängig', revert_version_path(@entry.versions.reload.last), method: :post)
   end
 
   def record_not_found
     redirect_to entries_url
   end
-  def sort_column
-    Entry.column_names.include?(params[:sort]) ? params[:sort] : "japanische_umschrift"
+
+  def search_entries
+    Entry.search(params[:field_select], params[:search])
   end
-  
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+
+  def sort_entries
+    if Entry::BEARBEITUNGS_STAND.include?(sort_column)
+      Entry.where(bearbeitungsstand: sort_column).order(japanische_umschrift: sort_direction)
+    else
+      Entry.order(sort_column + ' ' + sort_direction)
+    end
   end
 end

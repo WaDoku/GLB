@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe UsersController, type: :controller do
-  let(:super_admin) { FactoryGirl.create(:admin, email: 'ulrich.apel@uni-tuebingen.de') }
-  let(:admin) { FactoryGirl.create(:admin) }
-  let(:editor) { FactoryGirl.create(:editor) }
-  let(:author) { FactoryGirl.create(:author) }
-  let(:commentator) { FactoryGirl.create(:commentator) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:super_admin) { create(:admin, email: 'ulrich.apel@uni-tuebingen.de') }
+  let(:admin) { create(:admin) }
+  let(:editor) { create(:editor) }
+  let(:author) { create(:author) }
+  let(:commentator) { create(:commentator) }
+  let(:user) { create(:user) }
 
-  describe 'get index' do
+  describe 'GET index' do
     subject { get :index }
 
     it_behaves_like 'something that admin, editor & author can access'
     it_behaves_like 'something that commentator and guest can not access'
   end
 
-  describe 'get new' do
+  describe 'GET new' do
     context 'as admin' do
       before do
         sign_in admin
@@ -40,11 +40,11 @@ describe UsersController, type: :controller do
       context 'with valid attributes' do
         before do
           sign_in admin
-          post :create, user: FactoryGirl.attributes_for(:user)
+          post :create, user: attributes_for(:user)
         end
         it 'creates a new user' do
           expect {
-            post :create, user: FactoryGirl.attributes_for(:user)
+            post :create, user: attributes_for(:user)
           }.to change(User, :count).by(1)
         end
         it 'redirect to the new user' do
@@ -57,11 +57,11 @@ describe UsersController, type: :controller do
       context 'with invalid attributes' do
         before do
           sign_in admin
-          post :create, user: FactoryGirl.attributes_for(:user, name: '')
+          post :create, user: attributes_for(:user, name: '')
         end
         it 'does not create a new user' do
           expect {
-            post :create, user: FactoryGirl.attributes_for(:author, name: '')
+            post :create, user: attributes_for(:author, name: '')
           }.to_not change(User, :count)
         end
         it 'redirects to the new-template' do
@@ -70,13 +70,13 @@ describe UsersController, type: :controller do
       end
     end
     context 'as non-admin' do
-      subject { post :create, user: FactoryGirl.attributes_for(:user) }
+      subject { post :create, user: attributes_for(:user) }
 
       it_behaves_like 'something that only admin can access'
     end
   end
 
-  describe 'get edit' do
+  describe 'GET edit' do
     context 'as admin' do
       it 'renders the view' do
         sign_in admin
@@ -91,7 +91,7 @@ describe UsersController, type: :controller do
     end
   end
 
-  describe 'get update' do
+  describe 'PUT update' do
     context 'as admin' do
       before do
         sign_in admin
@@ -132,7 +132,7 @@ describe UsersController, type: :controller do
       end
       context 'users that hold entries' do
         before do
-          user.entries << FactoryGirl.create(:entry)
+          user.entries << create(:entry)
           super_admin
         end
         it 'remaining entries get reassigned to superadmin' do

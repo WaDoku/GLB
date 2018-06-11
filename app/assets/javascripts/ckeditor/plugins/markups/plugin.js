@@ -20,6 +20,7 @@ CKEDITOR.plugins.add( 'markups',
     addTagCommand('Sonstiges', 'Sonstiges', 'markSonstiges', 'sonstiges');
     addTagCommand('Eigennamen', 'Eigennamen', 'markEigennamen', 'eigennamen');
     addTagCommand('fragliche Stellen', 'fragliche Stellen', 'markFragliche_Stellen', 'fragliche_stellen');
+    addTagCommand('Indexeintrag', 'Indexeintrag', 'markIndexeintrag', 'indexeintrag');
   }
 
 } );

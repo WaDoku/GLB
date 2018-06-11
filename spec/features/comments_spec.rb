@@ -2,20 +2,18 @@ require 'spec_helper'
 
 describe 'comments management' do
   describe 'admin write a comment' do
-    let(:entry) { FactoryGirl.create(:entry) }
-    let(:comment) { FactoryGirl.create(:comment) }
-    let(:admin) { FactoryGirl.create(:admin) }
+    let(:entry) { FactoryBot.create(:entry) }
+    let(:comment) { FactoryBot.create(:comment, entry_id: entry.id) }
+    let(:admin) { FactoryBot.create(:admin) }
     before do
-      visit new_user_session_path
-      fill_in 'user_email', with: admin.email
-      fill_in 'user_password', with: admin.password
-      click_button('Anmelden')
+      comment.save
+      login_as_user(admin)
     end
     it 'edits a comment' do
-      comment.update(comment: 'previous comment content', entry_id: entry.id)
+      comment.update(comment: 'previous comment content')
       visit entry_path(entry)
-      within('.unstyled') do
-        click_link('Bearbeiten')
+      within ".capyb" do
+        click_link("Bearbeiten")
       end
       fill_in 'comment_comment', with: 'new comment-content'
       click_button('Speichern')
@@ -32,13 +30,12 @@ describe 'comments management' do
       visit entry_path(entry)
       fill_in 'comment_comment', with: ''
       click_button('Speichern')
-      expect(page).to have_content('The form contains 1 error.')
+      expect(page).to have_content('Kommentar darf nicht leer sein!')
     end
     it 'deletes a comment' do
-      comment.update(entry_id: entry.id)
       visit entry_path(entry)
-      within('.unstyled') do
-        click_link('Löschen')
+      within ".capyb" do
+        click_link("Löschen")
       end
       expect(page).not_to have_content(comment.comment)
     end

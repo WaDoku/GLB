@@ -1,14 +1,15 @@
 require 'spec_helper'
 
 describe EntriesController, type: :controller do
-  let(:entry) { FactoryGirl.create(:entry) }
-  let(:unpublished_entry) { FactoryGirl.create(:entry) }
-  let(:published_entry) { FactoryGirl.create(:published_entry) }
-  let(:admin) { FactoryGirl.create(:admin) }
-  let(:editor) { FactoryGirl.create(:editor) }
-  let(:author) { FactoryGirl.create(:author) }
-  let(:commentator) { FactoryGirl.create(:commentator) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:entry) { create(:entry) }
+  let(:unpublished_entry) { create(:entry) }
+  let(:published_entry) { create(:published_entry) }
+  let(:admin) { create(:admin) }
+  let(:editor) { create(:editor) }
+  let(:author) { create(:author) }
+  let(:commentator) { create(:commentator) }
+  let(:user) { create(:user) }
+  let(:assignment) { create(:assignment, entry_id: entry.id) }
 
   before do
     admin
@@ -99,6 +100,15 @@ describe EntriesController, type: :controller do
 
       it_behaves_like 'something that admin & editor can access'
     end
+    context 'when entry is assigned' do
+      it 'shows a flash-message' do
+        sign_in(admin)
+        assignment
+        entry.update(user_id: admin.id)
+        get :edit, id: entry.id
+        expect(flash[:notice]).to eq("In Bearbeitung von #{entry.user_name} zum #{entry.assignment.to_date}" )
+      end
+    end
     context 'as author' do
       it 'own entries can be edited' do
         sign_in author
@@ -116,7 +126,7 @@ describe EntriesController, type: :controller do
     context 'as commentator and guest' do
       subject { get :edit, id: entry.id }
 
-      it_behaves_like 'something that commentator and guest can not access' 
+      it_behaves_like 'something that commentator and guest can not access'
     end
   end
 
@@ -128,28 +138,28 @@ describe EntriesController, type: :controller do
       context 'for herself' do
         it 'creates an entry' do
           expect {
-            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: admin.id)
+            post :create, entry: attributes_for(:entry, user_id: admin.id)
           }.to change(Entry, :count).by(1)
           assigns(:entry).tap do |entry|
             expect(entry.user).to eq(admin)
           end
         end
         it 'and gets redirects to the it' do
-          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: admin.id)
+          post :create, entry: attributes_for(:entry, user_id: admin.id)
           expect(response).to redirect_to(Entry.last)
         end
       end
       context 'for somebody else' do
         it 'creates an entry' do
           expect {
-            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+            post :create, entry: attributes_for(:entry, user_id: author.id)
           }.to change(Entry, :count).by(1)
           assigns(:entry).tap do |entry|
             expect(entry.user).to eq(author)
           end
         end
         it 'and gets redirects to the it' do
-          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          post :create, entry: attributes_for(:entry, user_id: author.id)
           expect(response).to redirect_to(Entry.last)
         end
       end
@@ -161,28 +171,28 @@ describe EntriesController, type: :controller do
       context 'for herself' do
         it 'creates an entry' do
           expect {
-            post :create, entry: attributes = FactoryGirl.attributes_for(:entry, user_id: editor.id)
+            post :create, entry: attributes = attributes_for(:entry, user_id: editor.id)
           }.to change(Entry, :count).by(1)
           assigns(:entry).tap do |entry|
             expect(entry.user).to eq(editor)
           end
         end
         it 'and gets redirects to the it' do
-          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+          post :create, entry: attributes_for(:entry, user_id: editor.id)
           expect(response).to redirect_to(Entry.last)
         end
       end
       context 'for somebody else' do
         it 'creates an entry' do
           expect {
-            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+            post :create, entry: attributes_for(:entry, user_id: author.id)
           }.to change(Entry, :count).by(1)
           assigns(:entry).tap do |entry|
             expect(entry.user).to eq(author)
           end
         end
         it 'and gets redirects to the it' do
-          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          post :create, entry: attributes_for(:entry, user_id: author.id)
           expect(response).to redirect_to(Entry.last)
         end
       end
@@ -194,39 +204,39 @@ describe EntriesController, type: :controller do
       context 'for herself' do
         it 'creates an entry' do
           expect {
-            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+            post :create, entry: attributes_for(:entry, user_id: author.id)
           }.to change(Entry, :count).by(1)
           assigns(:entry).tap do |entry|
             expect(entry.user).to eq(author)
           end
         end
         it 'and gets redirects to the it' do
-          post :create, entry: FactoryGirl.attributes_for(:entry, user_id: author.id)
+          post :create, entry: attributes_for(:entry, user_id: author.id)
           expect(response).to redirect_to(Entry.last)
         end
       end
       context 'for somebody else' do
         it 'does not creates an entry' do
           expect {
-            post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+            post :create, entry: attributes_for(:entry, user_id: editor.id)
           }.to change(Entry, :count).by(0)
         end
       end
       it 'gets redirects to the root path' do
-        post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+        post :create, entry: attributes_for(:entry, user_id: editor.id)
         expect(response).to redirect_to(root_path)
       end
       it 'and gets an error-message' do
-        post :create, entry: FactoryGirl.attributes_for(:entry, user_id: editor.id)
+        post :create, entry: attributes_for(:entry, user_id: editor.id)
         expect(flash[:notice]).to eq('Zugriff verwehrt')
       end
     end
-    subject { post :create, entry: FactoryGirl.attributes_for(:entry) }
+    subject { post :create, entry: attributes_for(:entry) }
 
     it_behaves_like 'something that commentator and guest can not access'
   end
 
-  describe 'Get update' do
+  describe 'Put update' do
     context 'admin' do
       before do
         sign_in admin
@@ -294,14 +304,14 @@ describe EntriesController, type: :controller do
           put :update, id: entry.id, entry: { japanische_umschrift: 'some editing on somebody else\'s entry' }
           entry.reload
         end
-        it 'gets updated' do
-          expect(entry.japanische_umschrift).to eq('some editing on somebody else\'s entry')
+        it 'does not get updated' do
+          expect(entry.japanische_umschrift).not_to eq('some editing on somebody else\'s entry')
         end
-        it 'gets redirect to it' do
-          expect(response).to redirect_to(entry)
+        it 'gets redirected' do
+          expect(response).to redirect_to(root_path)
         end
-        it 'and gets a notification' do
-          expect(flash[:notice]).not_to be_empty
+        it 'and gets an error-message' do
+          expect(flash[:notice]).to eq('Zugriff verwehrt')
         end
       end
     end
@@ -367,6 +377,17 @@ describe EntriesController, type: :controller do
         it 'gets redirected to users entries-index' do
           delete :destroy, id: entry.id
           expect(response).to redirect_to(user_entries_path(admin))
+        end
+      end
+      context 'related assignment' do
+        before do
+          entry.update(user_id: admin.id)
+          assignment.update(entry_id: entry.id)
+        end
+        it 'gets deleted along' do
+          expect {
+            delete :destroy, id: entry.id
+          }.to change(Assignment, :count).by(-1)
         end
       end
       context 'other users entries' do

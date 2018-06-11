@@ -1,7 +1,10 @@
 .fachtermini {
   color: blue;
   font-style: italic;
+}
 
+.eigennamen {
+  color: magenta;
 }
 
 .werktitel_original {
@@ -24,4 +27,8 @@
 
 .fragliche_stellen {
   text-decoration: underline;
+}
+
+.indexeintrag {
+  text-decoration: overline;
 }

@@ -1,20 +1,18 @@
 require 'spec_helper'
 
 describe 'versions management' do
+  let(:edited_entry) { create(:entry, sanskrit: 'previous content') }
+  let(:admin) { create(:admin) }
   context 'admin logs in' do
     before do
-      admin = FactoryGirl.create(:admin)
-      visit new_user_session_path
-      fill_in 'user_email', with: admin.email
-      fill_in 'user_password', with: admin.password
-      click_button('Anmelden')
+      login_as_user(admin)
     end
     context 'updates an entry' do
       before do
-        entry = FactoryGirl.create(:entry, lemma_in_katakana: 'previous content')
-        visit edit_entry_path(entry)
-        fill_in 'entry_lemma_in_katakana', with: 'some editing in the field entry_lemma_in_katakana'
-        click_button('Bearbeitung speichern')
+        edited_entry
+        visit edit_entry_path(edited_entry)
+        fill_in 'entry_sanskrit', with: 'some editing in the field entry_lemma_in_katakana'
+        click_button('Speichern')
       end
       it 'sees the changed entry' do
         expect(page).to have_text('some editing in the field entry_lemma_in_katakana')

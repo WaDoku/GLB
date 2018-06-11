@@ -8,12 +8,9 @@ describe 'user profile management' do
     end
   end
   context 'logged in users' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before do
-      visit new_user_session_path
-      fill_in 'user_email', with: user.email
-      fill_in 'user_password', with: user.password
-      click_button('Anmelden')
+      login_as_user(user)
     end
     it 'should be able to visit their profile page' do
       visit edit_profile_path

@@ -1,5 +1,6 @@
 DGLB::Application.routes.draw do
-  root to: 'entries#index'
+  resources :assignments, only: [:show, :new, :edit, :create, :update, :destroy]
+  root to: 'dsgvo#welcome'
   devise_for :users, skip: :registration
   resources :entries
   resources :users, except: :show do
