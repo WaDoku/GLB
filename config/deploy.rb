@@ -5,7 +5,6 @@ require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 
 set :rvm_ruby_string, :local
 set :rvm_type, :system  # Copy the exact line. I really mean :system here
-
 set :application, "DGLB"
 set :repository,  "https://github.com/WaDoku/GLB.git"
 

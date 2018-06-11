@@ -1,28 +1,16 @@
-<% content_for :content_2 do %>
-  <%= content_tag :div, id: 'kennzahl', data: {kennzahl: @entry.kennzahl.to_i } do %>
-  <% end %>
-  <%= form_for @entry do |f| %>
-    <div style="width: 850px; float: left; position: fixed; margin-top: -50px">
-      <span class="right-action"><%= f.submit 'Bearbeitung speichern', class: 'btn' %></span><span class="right-action"> <%= link_to 'Anzeigen', @entry, class: 'btn' %></span>
-      <h1>Eintrag Bearbeiten</h1>
-      <div class="funky_grey_seperator">
-        <span class="right-action"><button class= "btn" id="forward" type="button" onclick="forward_switch()">Vor</button></span>
-        <span class="right-action"><button class= "btn" id ="back" type="button" onclick="back_switch()">Zurück</button></span>
-        <span class="right-action"><button class= "btn" id ="back_first" type="button" onclick="back_first_switch()">Erste Seite</button></span>
-        <span class="left-action" id="page_count" style="display: block; font-size: .83em; margin-top: 1.67em; margin-bottom: 1.67em; font-weight: bold"></span>
-        <% pages = to_scan_pages(@entry.kennzahl) %>
-
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[0]}_oben.jpg", style: "display: block;", id: "page0", size: '880x880'  %>
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[0]}_mitten.jpg", style: "display: none;", id: "page1", size: '880x880'  %>
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[0]}_unten.jpg", style: "display: none;", id: "page2", size: '880x880'  %>
-
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[1]}_oben.jpg", style: "display: none;", id: "page3", size: '880x880'  %>
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[1]}_mitten.jpg", style: "display: none;", id: "page4", size: '880x880'  %>
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[1]}_unten.jpg", style: "display: none;", id: "page5", size: '880x880'  %>
-
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[2]}_oben.jpg", style: "display: none;", id: "page6", size: '880x880'  %>
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[2]}_mitten.jpg", style: "display: none;", id: "page7", size: '880x880'  %>
-        <%= image_tag "http://buddhismus-lexikon.eu:2001/SBDJ-Original-JPGs/Lex_#{pages[2]}_unten.jpg", style: "display: none;", id: "page8", size: '880x880'  %>
+<%= content_tag :div, id: 'kennzahl', data: { kennzahl: @entry.kennzahl.to_i } do %>
+<% end %>
+<%= bootstrap_form_for @entry do |f| %>
+  <div style="width: 800px; position: fixed">
+    <div class="funky_grey_seperator">
+      <div style="float: left;">
+        <%= link_to 'Seite', embed_scans(@entry.kennzahl)[0][:url] %>
+        <a href="#"><span class="badge"><span id="page_count"></span></span></a>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" onclick="back_switch()" id="back"class="btn btn-default">Zurück</button>
+          <button type="button" onclick="forward_switch()" id="forward" class="btn btn-default">Vor</button>
+          <button type="button" onclick="back_first_switch()" id="back_first" class="btn btn-default">1. Textblock</button>
+        </div>
       </div>
       <div class="btn-group" role="group" aria-label="..."style="float: right;">
         <%= link_to 'Anzeigen', @entry, class: 'btn btn-default' %>
@@ -34,18 +22,6 @@
             <%= link_to 'Zuweisen', new_assignment_path({entry_id: @entry.id}), class: 'btn btn-default' %>
           <% end %>
         <% end %>
-        <%= f.label :freigeschaltet %>
-        <%= f.check_box :freigeschaltet %>
-        <%= f.label :namenskuerzel %>
-        <%= f.text_field :namenskuerzel %>
-        <%= f.label :kennzahl %>
-        <%= f.text_field :kennzahl, required: true %>
-        <%= f.label :spaltenzahl %>
-        <%= f.text_field :spaltenzahl %>
-        <%= f.label :abweichende_kennzahl%>
-        <%= f.text_field :abweichende_kennzahl%>
-        <%= f.label :seite_textblock2005, 'Seite Textblock 2005' %>
-        <%= f.text_field :seite_textblock2005 %>
       </div>
       <div style="margin-top: 50px; margin-bottom: 15px;">
         <% embed_scans(@entry.kennzahl).map do |scan| %>
@@ -113,10 +89,6 @@
         <%= f.cktext_area :quellen_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
         <%= f.label :literatur_ergaenzungen, 'Literatur Ergänzungen' %>
         <%= f.cktext_area :literatur_ergaenzungen, :ckeditor => {:uiColor => "#AADC6E", :toolbar => "MyToolbar"} %>
-        <%= f.label :japanischer_quelltext %>
-        <%= f.text_field :japanischer_quelltext %>
-        <%= f.label :japanischer_quelltext_bearbeitungsstand %>
-        <%= f.text_field :japanischer_quelltext_bearbeitungsstand %>
       </div>
       <button type="button" class="btn2">Weitere Felder</button>
     </div>
