@@ -46,3 +46,6 @@ end
 
 # Added at 2018-04-10 13:49:55 +0200 by toni:
 gem "rake", "~> 12.3"
+
+# Added at 2018-06-14 19:33:08 +0200 by toni:
+gem "puma", "~> 3.11"
